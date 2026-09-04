@@ -1,0 +1,35 @@
+{% extends 'global/base.html' %}
+
+{% block title %}{{ kit.nome }}{% endblock title %}
+
+{% block content %}
+<article class="product-detail-wrapper">
+  <div>
+    {% if kit.imagem %}
+      <img src="{{ kit.imagem.url }}" alt="{{ kit.nome }}" class="detail-img">
+    {% else %}
+      <div class="detail-img" style="background:#F5EAE4; display:flex; align-items:center; justify-content:center; font-size:3rem;">🎁</div>
+    {% endif %}
+  </div>
+  <div>
+    <h2 style="color: var(--color-primary);">{{ kit.nome }}</h2>
+    <h3 class="product-price" style="margin-top: 0.5rem;">R$ {{ kit.preco }}</h3>
+    
+    <p style="margin: 1rem 0;">{{ kit.descricao }}</p>
+
+    <h4 style="margin-bottom: 0.5rem; color: var(--color-text);">Composição do Kit:</h4>
+    <ul style="margin-left: 1.2rem; margin-bottom: 1.5rem;">
+      {% for produto in kit.produtos.all %}
+        <li>{{ produto.nome }} - R$ {{ produto.preco }}</li>
+      {% empty %}
+        <li>Nenhum produto cadastrado neste kit.</li>
+      {% endfor %}
+    </ul>
+
+    <div style="display: flex; gap: 1rem;">
+      <a href="{% url 'kits:editar' kit.id %}" class="btn">Editar Kit</a>
+      <a href="{% url 'kits:listar' %}" class="btn" style="background-color: #4A3525;">Voltar à Lista</a>
+    </div>
+  </div>
+</article>
+{% endblock content %}
