@@ -1,0 +1,105 @@
+/* Paleta de Cores Doce Delícia */
+:root {
+  --color-primary: #8C232B; /* Bordô / Vinho do botão principal */
+  --color-primary-hover: #6c1a21;
+  --color-bg-main: #FDF5E6; /* Creme / Rosé bem claro de fundo */
+  --color-bg-card: #FFFFFF;
+  --color-text: #4A3525; /* Marrom escuro para textos */
+  --color-border: #E8D3C5;
+  --color-accent: #EBB298; /* Rosé de destaque */
+  --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Header & Nav */
+.main-header {
+  background-color: #FFF8F3;
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.main-nav {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.main-nav a {
+  font-weight: 600;
+  color: var(--color-text);
+  transition: color 0.2s;
+}
+
+.main-nav a:hover {
+  color: var(--color-primary);
+}
+
+/* Container Principal */
+.main-container {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Footer */
+.main-footer {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: auto;
+}
+
+/* Componentes de Botão */
+.btn {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: #FFF;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: var(--color-primary-hover);
+}

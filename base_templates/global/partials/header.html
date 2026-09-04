@@ -1,0 +1,15 @@
+<header class="main-header">
+  <div class="logo-container">
+    <a href="{% url 'administradora:home' %}" class="logo-text">
+      🍰 Doce Delícia
+    </a>
+  </div>
+
+  <nav class="main-nav">
+    <a href="{% url 'administradora:home' %}">Início</a>
+    <a href="{% url 'categorias:listar' %}">Categorias</a>
+    <a href="{% url 'produtos:listar' %}">Produtos</a>
+    <a href="{% url 'kits:listar' %}">Kits</a>
+    <a href="{% url 'encomendas:listar' %}">Encomendas</a>
+  </nav>
+</header>
