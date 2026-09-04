@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from kits.models import Kit
 from produtos.models import Produto
+from sistema_doceria.validators import validar_data_futura, validar_preco_positivo
 
 
 class Encomenda(models.Model):
@@ -13,11 +14,29 @@ class Encomenda(models.Model):
         ('Cancelada', 'Cancelada'),
     )
 
-    cliente = models.ForeignKey(User, on_delete=models.CASCADE, related_name='encomendas')
+    # Torna os campos estritamente obrigatórios no banco
+    cliente = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE, 
+        related_name='encomendas', 
+        null=False, 
+        blank=False
+    )
     data_criacao = models.DateTimeField(auto_now_add=True)
-    data_entrega = models.DateField(blank=True, null=True)
+
+    data_entrega = models.DateField(
+        null=False,
+        blank=False,
+        validators=[validar_data_futura]
+    )
     status = models.CharField(max_length=30, choices=STATUS_CHOICES, default='Pendente')
-    valor_total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    valor_total = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2, 
+        null=False, 
+        blank=False, 
+        validators=[validar_preco_positivo]
+    )
     produtos = models.ManyToManyField(Produto, through='ItemEncomendaProduto', blank=True)
     kits = models.ManyToManyField(Kit, through='ItemEncomendaKit', blank=True)
 
