@@ -1,0 +1,26 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+<section class="login-wrapper">
+  <h2 style="color: var(--color-primary); margin-bottom: 0.5rem;">BEM-VINDA! ♡</h2>
+  <p style="margin-bottom: 1.5rem; font-size: 0.9rem;">Faça seu login para continuar</p>
+
+  <form action="{% url 'administradora:login' %}" method="POST">
+    {% csrf_token %}
+    
+    <div class="form-group">
+      {{ form.username.label_tag }}
+      {{ form.username }}
+    </div>
+
+    <div class="form-group">
+      {{ form.password.label_tag }}
+      {{ form.password }}
+    </div>
+
+    <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Entrar</button>
+  </form>
+</section>
+{% endblock content %}

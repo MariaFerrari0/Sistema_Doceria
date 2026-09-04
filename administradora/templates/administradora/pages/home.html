@@ -1,8 +1,51 @@
 {% extends 'global/base.html' %}
 
-{% block title %}Página Inicial{% endblock title %}
+{% block title %}Catálogo de Docinhos{% endblock title %}
 
 {% block content %}
-  <h1>Painel Administrativo Doce Delícia</h1>
-  <p>Bem-vinda ao sistema de gerenciamento de produtos, kits e encomendas!</p>
+<section class="hero-banner">
+  <div class="hero-text">
+    <h2>Os melhores docinhos<br>para os melhores momentos!</h2>
+    <a href="#catalogo" class="btn">Ver Catálogo</a>
+  </div>
+</section>
+
+<section id="catalogo">
+  <h3 style="margin-bottom: 1rem;">Nossos Docinhos</h3>
+
+  <!-- Filtro por Categoria -->
+  <div class="category-filter">
+    <a href="{% url 'administradora:home' %}" 
+       class="category-chip {% if not categoria_selecionada %}active{% endif %}">
+       Todos
+    </a>
+    {% for cat in categorias %}
+      <a href="?categoria={{ cat.id }}" 
+         class="category-chip {% if categoria_selecionada == cat.id|stringformat:'s' %}active{% endif %}">
+         {{ cat.nome }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Grid de Produtos cadastrados -->
+  <div class="product-grid">
+    {% for produto in produtos %}
+      <article class="product-card">
+        {% if produto.imagem %}
+          <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="product-img">
+        {% else %}
+          <div class="product-img" style="display:flex; align-items:center; justify-content:center;">🍰</div>
+        {% endif %}
+        
+        <div class="product-info">
+          <h4 class="product-title">{{ produto.nome }}</h4>
+          <span class="product-price">R$ {{ produto.preco }}</span>
+          <a href="{% url 'produtos:detalhe' produto.slug %}" class="btn">Ver detalhes</a>
+        </div>
+      </article>
+    {% empty %}
+      <p>Nenhum doce cadastrado nesta categoria no momento.</p>
+    {% endfor %}
+  </div>
+</section>
 {% endblock content %}
