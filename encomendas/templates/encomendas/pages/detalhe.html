@@ -36,5 +36,13 @@
       {% endif %}
     </div>
   </div>
+
+  <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+  <a href="{% url 'encomendas:editar' encomenda.id %}" class="btn">Editar Encomenda</a>
+  <a href="{% url 'encomendas:listar' %}" class="btn" style="background-color: #4A3525;">Voltar à Lista</a>
+  {% if encomenda.status != 'Cancelada' %}
+    <a href="{% url 'encomendas:cancelar' encomenda.id %}" class="btn" style="background-color: #A64B2A;">Cancelar Encomenda</a>
+  {% endif %}
+</div>
 </article>
 {% endblock content %}

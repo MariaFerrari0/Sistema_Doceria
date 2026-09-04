@@ -35,9 +35,20 @@ def criar(request):
     form = EncomendaForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         encomenda = form.save()
-        messages.success(request, f'Encomenda #{encomenda.id} registrada!')
+        messages.success(request, f'Encomenda #{encomenda.id} registrada com sucesso!')
         return redirect('encomendas:detalhe', id=encomenda.id)
     return render(request, 'encomendas/pages/form.html', {'form': form, 'titulo': 'Nova Encomenda'})
+
+
+@login_required(login_url='administradora:login')
+def editar(request, id):
+    encomenda = get_object_or_404(Encomenda, id=id)
+    form = EncomendaForm(request.POST or None, instance=encomenda)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'Encomenda #{encomenda.id} atualizada com sucesso!')
+        return redirect('encomendas:detalhe', id=encomenda.id)
+    return render(request, 'encomendas/pages/form.html', {'form': form, 'titulo': f'Editar Encomenda #{encomenda.id}'})
 
 
 @login_required(login_url='administradora:login')

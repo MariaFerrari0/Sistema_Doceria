@@ -16,17 +16,25 @@ def login_view(request):
     if request.method == 'POST' and form.is_valid():
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
+        lembrar_me = form.cleaned_data['lembrar_me']
+        
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
             login(request, user)
+            if not lembrar_me:
+                # Expira o cookie ao fechar o navegador
+                request.session.set_expiry(0)
+            else:
+                # Mantém a sessão por 2 semanas (1209600 segundos)
+                request.session.set_expiry(1209600)
+                
             messages.success(request, f'Bem-vinda, {user.first_name or user.username}!')
             return redirect('administradora:home')
         else:
             messages.error(request, 'Usuário ou senha inválidos.')
 
     return render(request, 'administradora/pages/login.html', {'form': form})
-
 
 def logout_view(request):
     logout(request)

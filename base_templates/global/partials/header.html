@@ -12,7 +12,12 @@
       <a href="{% url 'produtos:listar' %}">Produtos</a>
       <a href="{% url 'kits:listar' %}">Kits</a>
       <a href="{% url 'encomendas:listar' %}">Encomendas</a>
-      <a href="{% url 'administradora:logout' %}" style="color: var(--color-primary);">Sair ({{ user.username }})</a>
+      <a href="{% url 'administradora:usuarios_listar' %}">Usuários</a>
+      <a href="{% url 'administradora:logout' %}" 
+         onclick="return confirm('Tem certeza que deseja sair do sistema?');" 
+         style="color: var(--color-primary);">
+         Sair ({{ user.username }})
+      </a>
     {% else %}
       <a href="{% url 'administradora:login' %}">Entrar</a>
     {% endif %}
