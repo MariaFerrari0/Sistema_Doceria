@@ -1,0 +1,27 @@
+{% extends 'global/base.html' %}
+
+{% block title %}{{ produto.nome }}{% endblock title %}
+
+{% block content %}
+<article class="product-detail-wrapper">
+  <div>
+    {% if produto.imagem %}
+      <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="detail-img">
+    {% else %}
+      <div class="detail-img" style="background:#F5EAE4; display:flex; align-items:center; justify-content:center; font-size:3rem;">🍰</div>
+    {% endif %}
+  </div>
+  <div>
+    <h2 style="color: var(--color-primary);">{{ produto.nome }}</h2>
+    <p style="margin: 0.5rem 0;"><strong>Categoria:</strong> {{ produto.categoria.nome|default:"Sem categoria" }}</p>
+    <h3 class="product-price">R$ {{ produto.preco }}</h3>
+    <p><strong>Estoque disponível:</strong> {{ produto.estoque }} unidades</p>
+    <p style="margin: 1rem 0;">{{ produto.descricao }}</p>
+
+    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+      <a href="{% url 'produtos:editar' produto.id %}" class="btn">Editar Produto</a>
+      <a href="{% url 'administradora:home' %}" class="btn" style="background-color: #4A3525;">Voltar ao Catálogo</a>
+    </div>
+  </div>
+</article>
+{% endblock content %}

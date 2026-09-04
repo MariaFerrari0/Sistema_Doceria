@@ -228,3 +228,55 @@ a {
 .input-control:focus {
   border-color: var(--color-primary);
 }
+
+/* Tabelas de Gestão */
+.table-container {
+  background: #FFF;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.data-table th, .data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table th {
+  background-color: #F9ECE4;
+  color: var(--color-primary);
+}
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.badge-success { background: #E2F0D9; color: #385723; }
+.badge-danger { background: #FCE4D6; color: #C65911; }
+
+/* Detalhes do Produto */
+.product-detail-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  background: #FFF;
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+}
+
+.detail-img {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+}

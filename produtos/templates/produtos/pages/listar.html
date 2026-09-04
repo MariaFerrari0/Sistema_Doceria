@@ -1,0 +1,59 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Gerenciamento de Produtos{% endblock title %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h2>Gerenciar Produtos</h2>
+  <a href="{% url 'produtos:criar' %}" class="btn">+ Novo Produto</a>
+</div>
+
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Foto</th>
+        <th>Nome</th>
+        <th>Categoria</th>
+        <th>Preço</th>
+        <th>Estoque</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in produtos %}
+      <tr>
+        <td>
+          {% if p.imagem %}
+            <img src="{{ p.imagem.url }}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+          {% else %}🍰{% endif %}
+        </td>
+        <td><strong>{{ p.nome }}</strong></td>
+        <td>{{ p.categoria.nome|default:"Sem categoria" }}</td>
+        <td>R$ {{ p.preco }}</td>
+        <td>{{ p.estoque }} un</td>
+        <td>
+          {% if p.ativo %}
+            <span class="badge badge-success">Ativo</span>
+          {% else %}
+            <span class="badge badge-danger">Inativo</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'produtos:detalhe' p.slug %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem;">Ver</a>
+          <a href="{% url 'produtos:editar' p.id %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem; background-color:#4A3525;">Editar</a>
+          <a href="{% url 'produtos:status' p.id %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem; background-color:#A64B2A;">
+            {% if p.ativo %}Desativar{% else %}Ativar{% endif %}
+          </a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7">Nenhum produto cadastrado.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}
