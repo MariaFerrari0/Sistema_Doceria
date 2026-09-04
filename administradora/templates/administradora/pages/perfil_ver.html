@@ -1,0 +1,26 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Meu Perfil{% endblock title %}
+
+{% block content %}
+<section class="login-wrapper" style="max-width: 500px; text-align: left;">
+  <h2 style="color: var(--color-primary); margin-bottom: 1.5rem;">Meu Perfil de Administradora</h2>
+
+  <div style="margin-bottom: 1rem;">
+    <strong>Nome:</strong> {{ usuario.first_name }} {{ usuario.last_name }}
+  </div>
+  <div style="margin-bottom: 1rem;">
+    <strong>Nome de Usuário:</strong> {{ usuario.username }}
+  </div>
+  <div style="margin-bottom: 1.5rem;">
+    <strong>E-mail:</strong> {{ usuario.email|default:"Não informado" }}
+  </div>
+
+  <div style="display: flex; gap: 1rem;">
+    <a href="{% url 'administradora:perfil_editar' %}" class="btn">Editar Perfil / Alterar Senha</a>
+    <a href="{% url 'administradora:perfil_excluir' %}" 
+       onclick="return confirm('Atenção: deseja realmente excluir permanentemente sua conta de administradora?');" 
+       class="btn" style="background-color: #A64B2A;">Excluir Conta</a>
+  </div>
+</section>
+{% endblock content %}
