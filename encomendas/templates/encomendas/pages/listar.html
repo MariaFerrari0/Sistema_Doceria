@@ -1,0 +1,56 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Gerenciamento de Encomendas{% endblock title %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <h2>Gerenciar Encomendas</h2>
+  <a href="{% url 'encomendas:criar' %}" class="btn">+ Nova Encomenda</a>
+</div>
+
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Pedido</th>
+        <th>Cliente</th>
+        <th>Data Pedido</th>
+        <th>Data Entrega</th>
+        <th>Valor Total</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for enc in encomendas %}
+      <tr>
+        <td><strong>#{{ enc.id }}</strong></td>
+        <td>{{ enc.cliente.get_full_name|default:enc.cliente.username }}</td>
+        <td>{{ enc.data_criacao|date:"d/m/Y H:i" }}</td>
+        <td>{{ enc.data_entrega|date:"d/m/Y"|default:"-" }}</td>
+        <td>R$ {{ enc.valor_total }}</td>
+        <td>
+          {% if enc.status == 'Concluida' %}
+            <span class="badge badge-success">{{ enc.status }}</span>
+          {% elif enc.status == 'Cancelada' %}
+            <span class="badge badge-danger">{{ enc.status }}</span>
+          {% else %}
+            <span class="badge" style="background:#FFF2CC; color:#7F6000;">{{ enc.status }}</span>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'encomendas:detalhe' enc.id %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem;">Ver Detalhes</a>
+          {% if enc.status != 'Cancelada' and enc.status != 'Concluida' %}
+            <a href="{% url 'encomendas:cancelar' enc.id %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem; background-color:#A64B2A;">Cancelar</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7">Nenhuma encomenda registrada.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock content %}

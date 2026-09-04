@@ -1,0 +1,40 @@
+{% extends 'global/base.html' %}
+
+{% block title %}Encomenda #{{ encomenda.id }}{% endblock title %}
+
+{% block content %}
+<article class="product-detail-wrapper" style="grid-template-columns: 1fr;">
+  <div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h2 style="color: var(--color-primary);">Detalhes da Encomenda #{{ encomenda.id }}</h2>
+      <span class="badge" style="font-size:1rem; padding:0.5rem 1rem; background:#F5EAE4; color:var(--color-primary);">
+        Status Atual: {{ encomenda.status }}
+      </span>
+    </div>
+
+    <hr style="margin: 1rem 0; border: 0; border-top: 1px solid var(--color-border);">
+
+    <p><strong>Cliente:</strong> {{ encomenda.cliente.get_full_name|default:encomenda.cliente.username }} ({{ encomenda.cliente.email }})</p>
+    <p><strong>Data do Pedido:</strong> {{ encomenda.data_criacao|date:"d/m/Y H:i" }}</p>
+    <p><strong>Data de Entrega Prevista:</strong> {{ encomenda.data_entrega|date:"d/m/Y"|default:"Não informada" }}</p>
+    <p><strong>Valor Total:</strong> R$ {{ encomenda.valor_total }}</p>
+
+    <!-- Formulário para alteração rápida de Status -->
+    <div style="margin-top: 2rem; background: #F9ECE4; padding: 1.5rem; border-radius: 12px;">
+      <h4 style="margin-bottom: 0.8rem; color: var(--color-text);">Alterar Status da Encomenda:</h4>
+      <form method="POST" style="display: flex; gap: 1rem; align-items: center;">
+        {% csrf_token %}
+        {{ form_status.status }}
+        <button type="submit" class="btn">Atualizar Status</button>
+      </form>
+    </div>
+
+    <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+      <a href="{% url 'encomendas:listar' %}" class="btn" style="background-color: #4A3525;">Voltar à Lista</a>
+      {% if encomenda.status != 'Cancelada' %}
+        <a href="{% url 'encomendas:cancelar' encomenda.id %}" class="btn" style="background-color: #A64B2A;">Cancelar Encomenda</a>
+      {% endif %}
+    </div>
+  </div>
+</article>
+{% endblock content %}
