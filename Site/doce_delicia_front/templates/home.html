@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Doce Delícia | Início{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/home.css' %}">{% endblock %}
+{% block content %}
+<div class="toolbar">
+  <form class="search" action="{% url 'produtos:listar' %}" method="get">
+    <input type="search" name="q" placeholder="Buscar docinhos..." aria-label="Buscar">
+    <button class="btn btn-primary btn-sm" type="submit">🔍</button>
+  </form>
+  <a href="#" class="cart-link" aria-label="Carrinho">🛍️<span class="badge" data-cart-count>{{ carrinho_qtd|default:0 }}</span></a> {# TODO: url do carrinho #}
+</div>
+
+<section class="hero" id="hero">
+  <div class="hero-text">
+    <h1>Os melhores docinhos</h1>
+    <p>para os melhores momentos!</p>
+    <a href="{% url 'produtos:listar' %}" class="btn btn-primary">Ver Catálogo</a>
+  </div>
+  <div class="hero-img img-slot">
+    {# Imagem do banner: <img src="{% static 'img/banner.jpg' %}" alt="Docinhos"> #}
+  </div>
+  <div class="dots">
+    <button class="dot active" aria-label="Slide 1"></button><button class="dot" aria-label="Slide 2"></button><button class="dot" aria-label="Slide 3"></button>
+  </div>
+</section>
+
+<h2 class="section-title">Nossos Docinhos</h2>
+<div class="cats">
+  <a href="{% url 'produtos:listar' %}" class="cat"><div class="img-slot"></div>Todos</a>
+  {% for c in categorias %}
+  <a href="{% url 'produtos:listar' %}?categoria={{ c.id }}" class="cat">
+    <div class="img-slot">{% if c.imagem %}<img src="{{ c.imagem.url }}" alt="{{ c.nome }}">{% endif %}</div>{{ c.nome }}
+  </a>
+  {% endfor %}
+</div>
+
+<a href="#" class="wa-banner">  {# TODO: link do WhatsApp #}
+  <span class="wa-ico">💬</span>
+  <div><strong>Pedidos via WhatsApp</strong><br><small>Clique e faça seu pedido de forma rápida e prática!</small></div>
+  <span class="arrow">›</span>
+</a>
+{% endblock %}
