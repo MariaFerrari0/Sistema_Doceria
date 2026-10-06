@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Doce Delícia{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+<header class="main-header">
+  <div class="logo-container">
+    <a href="{% url 'administradora:home' %}" class="logo-text">
+      🍰 Doce Delícia
+    </a>
+  </div>
+
+  <nav class="main-nav">
+    {% if user.is_authenticated %}
+      <a href="{% url 'administradora:home' %}">Início</a>
+      <a href="{% url 'categorias:listar' %}">Categorias</a>
+      <a href="{% url 'produtos:listar' %}">Produtos</a>
+      <a href="{% url 'kits:listar' %}">Kits</a>
+      <a href="{% url 'encomendas:listar' %}">Encomendas</a>
+      <a href="{% url 'administradora:perfil_ver' %}">Meu Perfil</a>
+      <a href="{% url 'administradora:logout' %}" 
+         onclick="return confirm('Tem certeza que deseja sair do sistema?');" 
+         style="color: var(--color-primary);">
+         Sair ({{ user.username }})
+      </a>
+    {% else %}
+      <a href="{% url 'administradora:login' %}">Entrar</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main class="page">
+  {% if messages %}
+    <ul class="messages">{% for m in messages %}<li class="msg {{ m.tags }}">{{ m }}</li>{% endfor %}</ul>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<section class="benefits">
+  <div><span>🛡️</span><p><strong>Compra 100% segura</strong>Seus dados protegidos.</p></div>
+  <div><span>🏅</span><p><strong>Docinhos feitos com amor</strong>Ingredientes selecionados e de qualidade.</p></div>
+  <div><span>💬</span><p><strong>Atendimento pelo WhatsApp</strong>Tire suas dúvidas e faça seu pedido!</p></div>
+  <div><span>🤍</span><p><strong>Sabor que encanta</strong>Docinhos para todos os momentos especiais.</p></div>
+</section>
+
+<footer class="main-footer">
+  <p>&copy; 2026 Doce Delícia - Todos os direitos reservados.</p>
+  <small>Sabor que encanta em todos os momentos especiais</small>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

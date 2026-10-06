@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Pedido via WhatsApp | Doce Delícia{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/whatsapp.css' %}">{% endblock %}
+{% block content %}
+<section class="wpp card">
+  <div class="phone" aria-hidden="true"><div class="screen"><span class="wa-logo">📞</span></div></div>
+  <div class="txt">
+    <h1>Seu pedido será enviado para o WhatsApp da Doce Delícia!</h1>
+    <ul class="checks">
+      <li>Você será redirecionado para o WhatsApp</li>
+      <li>Finalize seu pedido por lá</li>
+      <li>Pagamento e detalhes combinados com a loja</li>
+    </ul>
+    <a href="{{ whatsapp_url|default:'#' }}" class="btn btn-primary btn-block" target="_blank" rel="noopener">💬 Ir para o WhatsApp</a>
+    <a href="{% url 'produtos:listar' %}" class="btn btn-outline btn-block">‹ Voltar ao Catálogo</a>
+  </div>
+</section>
+{% endblock %}

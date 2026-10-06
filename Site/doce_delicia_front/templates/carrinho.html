@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Meu Carrinho | Doce Delícia{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/carrinho.css' %}">{% endblock %}
+{% block content %}
+<section class="carrinho card">
+  <div class="topo">
+    <a href="{% url 'produtos:listar' %}" aria-label="Voltar">←</a>
+    <h1>Meu Carrinho</h1>
+    <button class="lixo" id="limpar" aria-label="Esvaziar carrinho">🗑</button>
+  </div>
+
+  <div id="itens">
+    {% for item in itens %}
+    <div class="item" data-price="{{ item.preco|stringformat:'.2f' }}">
+      <div class="img-slot">{% if item.imagem %}<img src="{{ item.imagem.url }}" alt="{{ item.nome }}">{% endif %}</div>
+      <div class="nome"><strong>{{ item.nome }}</strong><span>R$ {{ item.preco|floatformat:2 }}</span></div>
+      <div class="qty"><button type="button" data-qty="-1">−</button><input type="number" value="{{ item.quantidade }}" min="1" readonly><button type="button" data-qty="1">+</button></div>
+      <span class="sub">R$ 0,00</span>
+      <button class="del" aria-label="Remover">🗑</button>
+    </div>
+    {% empty %}<p class="vazio">Seu carrinho está vazio. Que tal escolher uns docinhos?</p>{% endfor %}
+  </div>
+
+  <div class="total"><span>Total</span><strong id="total">R$ 0,00</strong></div>
+  <a href="#" class="btn btn-primary btn-block">💬 Finalizar pedido via WhatsApp</a> {# TODO: url do pedido #}
+  <a href="{% url 'produtos:listar' %}" class="btn btn-outline btn-block">‹ Continuar comprando</a>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+const brl=v=>'R$ '+v.toFixed(2).replace('.',',');
+function recalc(){let t=0;document.querySelectorAll('.item').forEach(i=>{const s=+i.dataset.price*+i.querySelector('input').value;i.querySelector('.sub').textContent=brl(s);t+=s});
+ const el=document.getElementById('total');el.textContent=brl(t);el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse')}
+document.querySelectorAll('.item [data-qty]').forEach(b=>b.onclick=()=>{const i=b.closest('.item').querySelector('input');i.value=Math.max(1,+i.value+ +b.dataset.qty);recalc()});
+function remover(i){i.classList.add('out');setTimeout(()=>{i.remove();recalc()},350)}
+document.querySelectorAll('.del').forEach(b=>b.onclick=()=>remover(b.closest('.item')));
+document.getElementById('limpar').onclick=()=>document.querySelectorAll('.item').forEach(remover);
+recalc();
+</script>
+{% endblock %}

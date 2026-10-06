@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ produto.nome }} | Doce Delícia{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/detalhe.css' %}">{% endblock %}
+{% block content %}
+<section class="detalhe card">
+  <div class="gal">
+    <div class="img-slot principal" id="principal">{% if produto.imagem %}<img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">{% endif %}</div>
+    <div class="thumbs">
+      {# Percorra as imagens extras do produto aqui #}
+      <button class="img-slot thumb active"></button><button class="img-slot thumb"></button><button class="img-slot thumb"></button>
+    </div>
+  </div>
+
+  <div class="info">
+    <div class="titulo"><h1>{{ produto.nome }}</h1><button class="fav" aria-label="Favoritar" id="fav">♡</button></div>
+    <p class="preco" data-price="{{ produto.preco|stringformat:'.2f' }}">R$ {{ produto.preco|floatformat:2 }}</p>
+    <p class="desc">{{ produto.descricao }}</p>
+    <ul class="feats">
+      <li>🌿 Feito com ingredientes selecionados</li>
+      <li>🤲 Produzido de forma artesanal</li>
+      <li>⚖️ Peso aproximado: {{ produto.peso|default:"20g" }}</li>
+    </ul>
+    <div class="qty-row"><span>Quantidade</span>
+      <div class="qty"><button type="button" data-qty="-1">−</button><input type="number" value="1" min="1" id="qtd"><button type="button" data-qty="1">+</button></div>
+    </div>
+    <form method="post" action="#">  {# TODO: url de adicionar ao carrinho #}
+      {% csrf_token %}<input type="hidden" name="quantidade" id="qtdHidden" value="1">
+      <button class="btn btn-primary btn-block" type="submit" data-toast="Adicionado ao carrinho! 🍫">🛒 Adicionar ao carrinho</button>
+    </form>
+    <a href="{% url 'produtos:listar' %}" class="btn btn-outline btn-block">‹ Voltar ao Catálogo</a>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+const q=document.getElementById('qtd'),h=document.getElementById('qtdHidden');
+document.querySelectorAll('[data-qty]').forEach(b=>b.onclick=()=>{q.value=Math.max(1,+q.value+ +b.dataset.qty);h.value=q.value});
+q.oninput=()=>h.value=q.value;
+document.getElementById('fav').onclick=e=>{const f=e.target;f.classList.toggle('on');f.textContent=f.classList.contains('on')?'♥':'♡'};
+document.querySelectorAll('.thumb').forEach(t=>t.onclick=()=>{document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));t.classList.add('active')});
+</script>
+{% endblock %}
