@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Catálogo | Doce Delícia{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/catalogo.css' %}">{% endblock %}
+{% block content %}
+<div class="catalogo">
+  <aside class="side">
+    <h3>Categorias</h3>
+    <nav class="side-nav">
+      <a href="{% url 'produtos:listar' %}" class="{% if not categoria_ativa %}active{% endif %}">Todos</a>
+      {% for c in categorias %}
+        <a href="?categoria={{ c.id }}" class="{% if categoria_ativa == c.id %}active{% endif %}">{{ c.nome }}</a>
+      {% endfor %}
+    </nav>
+    <a href="#" class="wa-box">  {# TODO: link do WhatsApp #}
+      <span>💬</span><strong>Peça pelo WhatsApp</strong><small>É rápido, fácil e prático!</small>
+    </a>
+  </aside>
+
+  <section class="lista">
+    <div class="lista-top">
+      <h2>Todos os Docinhos</h2>
+      <form method="get"><select name="ordem" onchange="this.form.submit()" aria-label="Ordenar">
+        <option value="vendidos">Ordenar por: Mais vendidos</option>
+        <option value="menor">Menor preço</option>
+        <option value="maior">Maior preço</option>
+      </select></form>
+    </div>
+    <div class="grid">
+      {% for p in produtos %}
+      <article class="prod reveal">
+        <a href="#" class="img-slot">{% if p.imagem %}<img src="{{ p.imagem.url }}" alt="{{ p.nome }}">{% endif %}</a> {# TODO: url do detalhe #}
+        <h4>{{ p.nome }}</h4>
+        <p class="preco">R$ {{ p.preco|floatformat:2 }}</p>
+        <a href="#" class="btn btn-primary btn-sm btn-block">Ver detalhes</a> {# TODO: url do detalhe #}
+      </article>
+      {% empty %}<p>Nenhum docinho encontrado.</p>{% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

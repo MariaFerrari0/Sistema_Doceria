@@ -1,130 +1,55 @@
-# Django #
-*.log
-*.pot
-*.pyc
-__pycache__
+# ==========================================
+# PROJETO DOCE DELÍCIA - .GITIGNORE
+# ==========================================
+
+# 1. Arquivos Sensíveis, Chaves e Senhas
+.env
+local_settings.py
+_local_settings.py
+__localcode
+
+# 2. Banco de Dados Local e Dumps do PostgreSQL
 db.sqlite3
-media
+db copy.sqlite3
+*.sql
+BDD.sql
+meubanco.sql
 
-# Backup files #
-*.bak
+# 3. Arquivos Enviados por Usuários (Media)
+media/
 
-# If you are using PyCharm #
-.idea/**/workspace.xml
-.idea/**/tasks.xml
-.idea/dictionaries
-.idea/**/dataSources/
-.idea/**/dataSources.ids
-.idea/**/dataSources.xml
-.idea/**/dataSources.local.xml
-.idea/**/sqlDataSources.xml
-.idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
-.idea/**/gradle.xml
-.idea/**/libraries
-*.iws /out/
-
-# Python #
+# 4. Compilação e Cache do Python
+__pycache__/
 *.py[cod]
 *$py.class
+*.log
+*.pot
 
-# Distribution / packaging
-.Python build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-*.manifest
-*.spec
+# 5. Ambientes Virtuais (Caso usem futuramente)
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.python-version
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
+# 6. Testes, Qualidade de Código e Ferramentas
+.pytest_cache/
+.mypy_cache/
 htmlcov/
 .tox/
 .coverage
 .coverage.*
 .cache
-.pytest_cache/
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# celery
-celerybeat-schedule.*
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-
-# Sublime Text #
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
+# 7. IDEs e Editores de Código
+.vscode/
+.idea/
 *.sublime-workspace
 *.sublime-project
-
-# sftp configuration file
-sftp-config.json
-
-# Package control specific files Package
-Control.last-run
-Control.ca-list
-Control.ca-bundle
-Control.system-ca-bundle
-GitHub.sublime-settings
-
-# Visual Studio Code #
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 .history
 
-# Personal additions
-__pycache__/
-*.pyc
-__localcode
-venv
-env
+# 8. Sistema Operacional
 .DS_Store
-local_settings.py
-_local_settings.py
-gunicorn-error-log
-db.sqlite3
-db copy.sqlite3
-static/
+Thumbs.db

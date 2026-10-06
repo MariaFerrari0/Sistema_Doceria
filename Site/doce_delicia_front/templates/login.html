@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Entrar | Doce Delícia{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/login.css' %}">{% endblock %}
+{% block content %}
+<section class="login-box card">
+  <div class="login-seal img-slot">
+    {# Coloque aqui o selo/logo: <img src="{% static 'img/logo.png' %}" alt="Doce Delícia"> #}
+    <span class="seal-text">Doce<br>Delícia</span>
+  </div>
+  <h1>BEM-VINDA! ♡</h1>
+  <p class="sub">Faça seu login para continuar</p>
+
+  <form method="post" class="login-form">
+    {% csrf_token %}
+    {% if form.errors %}<p class="msg error">E-mail ou senha incorretos.</p>{% endif %}
+    <label class="field"><span>✉️</span><input type="email" name="username" placeholder="E-mail" required autocomplete="email"></label>
+    <label class="field"><span>🔒</span><input type="password" name="password" id="senha" placeholder="Senha" required autocomplete="current-password">
+      <button type="button" class="eye" id="toggleSenha" aria-label="Mostrar senha">👁</button></label>
+    <div class="row">
+      <label class="check"><input type="checkbox" name="lembrar"> Lembrar-me</label>
+      <a href="#">Esqueceu sua senha?</a> {# TODO: url de recuperação #}
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+  </form>
+  <p class="cadastro">Não tem uma conta? <a href="#"><strong>Cadastre-se</strong></a> {# TODO: url de cadastro #}</p>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script>
+document.getElementById('toggleSenha').addEventListener('click',()=>{const s=document.getElementById('senha');s.type=s.type==='password'?'text':'password'});
+</script>
+{% endblock %}
