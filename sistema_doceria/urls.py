@@ -26,6 +26,7 @@ urlpatterns = [
     path('produtos/', include('produtos.urls')),
     path('kits/', include('kits.urls')),
     path('encomendas/', include('encomendas.urls')),
+    path('loja/', include('loja.urls')),
 ]
 
 # Servir arquivos de mídia (imagens) durante o desenvolvimento

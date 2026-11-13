@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -7,38 +8,34 @@
   <title>{% block title %}Doce Delícia{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'global/css/style.css' %}">
   {% block extra_css %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
 
 <header class="main-header">
   <div class="logo-container">
-    <a href="{% url 'administradora:home' %}" class="logo-text">
+    <a href="{% url 'loja:home' %}" class="logo-text">
       🍰 Doce Delícia
     </a>
   </div>
 
   <nav class="main-nav">
+    <a href="{% url 'loja:home' %}">Início</a>
+    <a href="#">Catálogo</a>
+    <a href="#">Kits</a>
+    <a href="#">Meu Carrinho</a>
+
     {% if user.is_authenticated %}
-      <a href="{% url 'administradora:home' %}">Início</a>
-      <a href="{% url 'categorias:listar' %}">Categorias</a>
-      <a href="{% url 'produtos:listar' %}">Produtos</a>
-      <a href="{% url 'kits:listar' %}">Kits</a>
-      <a href="{% url 'encomendas:listar' %}">Encomendas</a>
-      <a href="{% url 'administradora:perfil_ver' %}">Meu Perfil</a>
-      <a href="{% url 'administradora:logout' %}" 
-         onclick="return confirm('Tem certeza que deseja sair do sistema?');" 
-         style="color: var(--color-primary);">
-         Sair ({{ user.username }})
-      </a>
+      <a href="#">Minha Conta</a>
+      <a href="#">Sair</a>
     {% else %}
-      <a href="{% url 'administradora:login' %}">Entrar</a>
+      <a href="#">Entrar</a>
     {% endif %}
   </nav>
 </header>
 
-<main class="page">
+<main class="main-container">
   {% if messages %}
     <ul class="messages">{% for m in messages %}<li class="msg {{ m.tags }}">{{ m }}</li>{% endfor %}</ul>
   {% endif %}

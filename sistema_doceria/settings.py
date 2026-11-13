@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'produtos.apps.ProdutosConfig',
     'kits.apps.KitsConfig',
     'encomendas.apps.EncomendasConfig',
+    'loja.apps.LojaConfig',
 ]
 
 MIDDLEWARE = [
@@ -64,6 +65,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / 'base_templates',
+            BASE_DIR / 'Site' / 'doce_delicia_front' / 'templates',
         ],
         'APP_DIRS': True,
         'OPTIONS': {

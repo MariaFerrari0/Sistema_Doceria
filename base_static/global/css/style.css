@@ -280,3 +280,50 @@ a {
   object-fit: cover;
   border-radius: 12px;
 }
+
+
+/* BENEFÍCIOS DA LOJA */
+
+.benefits {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto 0;
+    padding: 30px 16px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px;
+}
+
+.benefits > div {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.benefits > div > span {
+    font-size: 25px;
+    flex-shrink: 0;
+}
+
+.benefits p {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.benefits strong {
+    display: block;
+    color: var(--color-primary);
+    margin-bottom: 4px;
+}
+
+@media (max-width: 800px) {
+    .benefits {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .benefits {
+        grid-template-columns: 1fr;
+    }
+}
