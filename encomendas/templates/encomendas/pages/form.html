@@ -1,26 +1,220 @@
+
 {% extends 'global/base.html' %}
 
 {% block title %}{{ titulo }}{% endblock title %}
 
 {% block content %}
-<section class="login-wrapper" style="max-width: 500px; text-align: left;">
-  <h2 style="color: var(--color-primary); margin-bottom: 1.5rem;">{{ titulo }}</h2>
+<section class="login-wrapper" style="max-width: 800px; text-align: left;">
 
-  <form method="POST">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="form-group">
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.errors %}
-          <small style="color: red;">{{ field.errors.0 }}</small>
+    <h2 style="color: var(--color-primary); margin-bottom: 1.5rem;">
+        {{ titulo }}
+    </h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <h3 style="color: var(--color-primary); margin-bottom: 1rem;">
+            Dados da Encomenda
+        </h3>
+
+        {% for field in form %}
+            {% if field.name != 'valor_total' %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <small style="color: red;">{{ field.errors.0 }}</small>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <hr style="margin: 2rem 0;">
+
+        <h3 style="color: var(--color-primary); margin-bottom: 1rem;">
+            Produtos
+        </h3>
+
+        {{ produtos_formset.management_form }}
+
+        <div id="produtos-container">
+            {% for item_form in produtos_formset %}
+                <div class="produto-item"
+                     style="background: #F9ECE4; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+
+                    {% for hidden in item_form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+
+                    {% for field in item_form.visible_fields %}
+                        {% if field.name != 'DELETE' %}
+                            <div class="form-group">
+                                {{ field.label_tag }}
+                                {{ field }}
+                                {% if field.errors %}
+                                    <small style="color: red;">{{ field.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <div style="display: none;">
+                        {{ item_form.DELETE }}
+                    </div>
+
+                    <button type="button" class="remover-produto"
+                            style="background: #A64B2A; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                        Remover produto
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <template id="produto-empty-form">
+            <div class="produto-item"
+                 style="background: #F9ECE4; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+
+                {% for hidden in produtos_formset.empty_form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                {% for field in produtos_formset.empty_form.visible_fields %}
+                    {% if field.name != 'DELETE' %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div style="display: none;">
+                    {{ produtos_formset.empty_form.DELETE }}
+                </div>
+
+                <button type="button" class="remover-produto"
+                        style="background: #A64B2A; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                    Remover produto
+                </button>
+            </div>
+        </template>
+
+        <button type="button" id="adicionar-produto" class="btn"
+                style="margin-bottom: 1rem;">
+            + Adicionar produto
+        </button>
+
+        <hr style="margin: 2rem 0;">
+
+        <h3 style="color: var(--color-primary); margin-bottom: 1rem;">
+            Kit
+        </h3>
+
+        {{ kits_formset.management_form }}
+
+        {% for item_form in kits_formset %}
+            <div style="background: #F9ECE4; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+
+                {% for hidden in item_form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+
+                {% for field in item_form.visible_fields %}
+                    <div class="form-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <small style="color: red;">{{ field.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            <div style="color: red;">
+                {{ form.non_field_errors }}
+            </div>
         {% endif %}
-      </div>
-    {% endfor %}
-    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-      <button type="submit" class="btn">Registrar Encomenda</button>
-      <a href="{% url 'encomendas:listar' %}" class="btn" style="background-color: #4A3525;">Cancelar</a>
-    </div>
-  </form>
+
+        {% if produtos_formset.non_form_errors %}
+            <div style="color: red;">
+                {{ produtos_formset.non_form_errors }}
+            </div>
+        {% endif %}
+
+        {% if kits_formset.non_form_errors %}
+            <div style="color: red;">
+                {{ kits_formset.non_form_errors }}
+            </div>
+        {% endif %}
+
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button type="submit" class="btn">
+                Salvar Encomenda
+            </button>
+
+            <a href="{% url 'encomendas:listar' %}" class="btn"
+               style="background-color: #4A3525;">
+                Cancelar
+            </a>
+        </div>
+
+    </form>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const container = document.getElementById('produtos-container');
+    const template = document.getElementById('produto-empty-form');
+    const botaoAdicionar = document.getElementById('adicionar-produto');
+
+    const prefixo = '{{ produtos_formset.prefix }}';
+
+    const totalForms = document.querySelector(
+        'input[name="' + prefixo + '-TOTAL_FORMS"]'
+    );
+
+    if (!container || !template || !botaoAdicionar || !totalForms) {
+        console.error('Erro ao localizar os elementos do formulário de produtos.');
+        return;
+    }
+
+    botaoAdicionar.addEventListener('click', function () {
+
+        const index = parseInt(totalForms.value, 10);
+
+        const novoFormulario = template.innerHTML.replace(
+            /__prefix__/g,
+            index
+        );
+
+        container.insertAdjacentHTML('beforeend', novoFormulario);
+
+        totalForms.value = index + 1;
+
+    });
+
+    container.addEventListener('click', function (event) {
+
+        if (event.target.classList.contains('remover-produto')) {
+
+            const item = event.target.closest('.produto-item');
+
+            const campoExcluir = item.querySelector(
+                'input[name$="-DELETE"]'
+            );
+
+            if (campoExcluir) {
+                campoExcluir.checked = true;
+                item.style.display = 'none';
+            }
+
+        }
+
+    });
+
+});
+</script>
+
 {% endblock content %}

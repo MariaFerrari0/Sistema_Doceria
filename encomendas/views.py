@@ -1,54 +1,221 @@
+
+from decimal import Decimal
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import EncomendaForm, StatusEncomendaForm
+
+from .forms import (
+    EncomendaForm,
+    StatusEncomendaForm,
+    ItemEncomendaProdutoFormSet,
+    ItemEncomendaKitFormSet,
+)
 from .models import Encomenda
+
+
+def calcular_total(produtos_formset, kits_formset):
+    total = Decimal('0.00')
+
+    for item in produtos_formset.cleaned_data:
+        if item and not item.get('DELETE', False):
+            produto = item.get('produto')
+            quantidade = item.get('quantidade')
+
+            if produto and quantidade:
+                total += produto.preco * quantidade
+
+    for item in kits_formset.cleaned_data:
+        if item and not item.get('DELETE', False):
+            kit = item.get('kit')
+            quantidade = item.get('quantidade')
+
+            if kit and quantidade:
+                total += kit.preco * quantidade
+
+    return total
 
 
 @login_required(login_url='administradora:login')
 def listar(request):
     encomendas = Encomenda.objects.all().order_by('-data_criacao')
-    return render(request, 'encomendas/pages/listar.html', {'encomendas': encomendas})
+
+    return render(
+        request,
+        'encomendas/pages/listar.html',
+        {'encomendas': encomendas}
+    )
 
 
 @login_required(login_url='administradora:login')
 def detalhe(request, id):
     encomenda = get_object_or_404(Encomenda, id=id)
     form_status = StatusEncomendaForm(instance=encomenda)
-    
+
     if request.method == 'POST':
-        form_status = StatusEncomendaForm(request.POST, instance=encomenda)
+        form_status = StatusEncomendaForm(
+            request.POST,
+            instance=encomenda
+        )
+
         if form_status.is_valid():
             form_status.save()
-            messages.success(request, f'Status da encomenda #{encomenda.id} atualizado!')
+
+            messages.success(
+                request,
+                f'Status da encomenda #{encomenda.id} atualizado!'
+            )
+
             return redirect('encomendas:detalhe', id=encomenda.id)
 
     context = {
         'encomenda': encomenda,
         'form_status': form_status,
     }
-    return render(request, 'encomendas/pages/detalhe.html', context)
+
+    return render(
+        request,
+        'encomendas/pages/detalhe.html',
+        context
+    )
 
 
 @login_required(login_url='administradora:login')
 def criar(request):
     form = EncomendaForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        encomenda = form.save()
-        messages.success(request, f'Encomenda #{encomenda.id} registrada com sucesso!')
-        return redirect('encomendas:detalhe', id=encomenda.id)
-    return render(request, 'encomendas/pages/form.html', {'form': form, 'titulo': 'Nova Encomenda'})
+
+    produtos_formset = ItemEncomendaProdutoFormSet(
+        request.POST or None,
+        instance=Encomenda()
+    )
+
+    kits_formset = ItemEncomendaKitFormSet(
+        request.POST or None,
+        instance=Encomenda()
+    )
+
+    if request.method == 'POST':
+        if (
+            form.is_valid()
+            and produtos_formset.is_valid()
+            and kits_formset.is_valid()
+        ):
+            total = calcular_total(
+                produtos_formset,
+                kits_formset
+            )
+
+            if total <= 0:
+                messages.error(
+                    request,
+                    'Adicione pelo menos um produto ou kit à encomenda.'
+                )
+            else:
+                with transaction.atomic():
+                    encomenda = form.save(commit=False)
+                    encomenda.valor_total = total
+                    encomenda.save()
+
+                    produtos_formset.instance = encomenda
+                    kits_formset.instance = encomenda
+
+                    produtos_formset.save()
+                    kits_formset.save()
+
+                messages.success(
+                    request,
+                    f'Encomenda #{encomenda.id} registrada com sucesso!'
+                )
+
+                return redirect(
+                    'encomendas:detalhe',
+                    id=encomenda.id
+                )
+
+    context = {
+        'form': form,
+        'produtos_formset': produtos_formset,
+        'kits_formset': kits_formset,
+        'titulo': 'Nova Encomenda',
+    }
+
+    return render(
+        request,
+        'encomendas/pages/form.html',
+        context
+    )
 
 
 @login_required(login_url='administradora:login')
 def editar(request, id):
     encomenda = get_object_or_404(Encomenda, id=id)
-    form = EncomendaForm(request.POST or None, instance=encomenda)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, f'Encomenda #{encomenda.id} atualizada com sucesso!')
-        return redirect('encomendas:detalhe', id=encomenda.id)
-    return render(request, 'encomendas/pages/form.html', {'form': form, 'titulo': f'Editar Encomenda #{encomenda.id}'})
+
+    form = EncomendaForm(
+        request.POST or None,
+        instance=encomenda
+    )
+
+    produtos_formset = ItemEncomendaProdutoFormSet(
+        request.POST or None,
+        instance=encomenda
+    )
+
+    kits_formset = ItemEncomendaKitFormSet(
+        request.POST or None,
+        instance=encomenda
+    )
+
+    if request.method == 'POST':
+        if (
+            form.is_valid()
+            and produtos_formset.is_valid()
+            and kits_formset.is_valid()
+        ):
+            total = calcular_total(
+                produtos_formset,
+                kits_formset
+            )
+
+            if total <= 0:
+                messages.error(
+                    request,
+                    'A encomenda precisa ter pelo menos um produto ou kit.'
+                )
+            else:
+                with transaction.atomic():
+                    encomenda = form.save(commit=False)
+                    encomenda.valor_total = total
+                    encomenda.save()
+
+                    produtos_formset.instance = encomenda
+                    kits_formset.instance = encomenda
+
+                    produtos_formset.save()
+                    kits_formset.save()
+
+                messages.success(
+                    request,
+                    f'Encomenda #{encomenda.id} atualizada com sucesso!'
+                )
+
+                return redirect(
+                    'encomendas:detalhe',
+                    id=encomenda.id
+                )
+
+    context = {
+        'form': form,
+        'produtos_formset': produtos_formset,
+        'kits_formset': kits_formset,
+        'titulo': f'Editar Encomenda #{encomenda.id}',
+    }
+
+    return render(
+        request,
+        'encomendas/pages/form.html',
+        context
+    )
 
 
 @login_required(login_url='administradora:login')
@@ -56,5 +223,10 @@ def cancelar(request, id):
     encomenda = get_object_or_404(Encomenda, id=id)
     encomenda.status = 'Cancelada'
     encomenda.save()
-    messages.warning(request, f'Encomenda #{encomenda.id} foi cancelada.')
+
+    messages.warning(
+        request,
+        f'Encomenda #{encomenda.id} foi cancelada.'
+    )
+
     return redirect('encomendas:listar')
