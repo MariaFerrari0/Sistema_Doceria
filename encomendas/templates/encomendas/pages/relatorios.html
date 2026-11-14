@@ -1,0 +1,121 @@
+
+{% extends 'global/base.html' %}
+{% load static %}
+
+{% block title %}Relatórios de Encomendas{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/encomendas.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<section class="relatorios-container">
+
+    <div class="relatorios-topo">
+        <div>
+            <h1>Relatórios</h1>
+            <p>Acompanhe o desempenho das encomendas da Doce Delícia.</p>
+        </div>
+
+        <a href="{% url 'encomendas:listar' %}" class="btn">
+            Voltar às Encomendas
+        </a>
+    </div>
+
+    <form method="get" class="filtros-relatorio">
+        <div>
+            <label for="data_inicio">Data inicial</label>
+            <input type="date" id="data_inicio" name="data_inicio"
+                   value="{{ data_inicio }}">
+        </div>
+
+        <div>
+            <label for="data_fim">Data final</label>
+            <input type="date" id="data_fim" name="data_fim"
+                   value="{{ data_fim }}">
+        </div>
+
+        <div class="filtro-botoes">
+            <button type="submit" class="btn">Filtrar</button>
+            <a href="{% url 'encomendas:relatorios' %}" class="btn-limpar">
+                Limpar
+            </a>
+        </div>
+    </form>
+
+    <div class="relatorios-resumo">
+
+        <article class="relatorio-card">
+            <span>Total de Encomendas</span>
+            <strong>{{ total_encomendas }}</strong>
+        </article>
+
+        <article class="relatorio-card">
+            <span>Faturamento Concluído</span>
+            <strong>R$ {{ faturamento|floatformat:2 }}</strong>
+        </article>
+
+    </div>
+
+    <section class="relatorio-secao">
+        <h2>Encomendas por Status</h2>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Quantidade</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in totais_status %}
+                    <tr>
+                        <td>{{ item.status }}</td>
+                        <td>{{ item.quantidade }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">Nenhuma encomenda encontrada.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="relatorio-secao">
+        <h2>Vendas Mensais</h2>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Encomendas Concluídas</th>
+                        <th>Faturamento</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in vendas_mensais %}
+                    <tr>
+                        <td>{{ item.mes|date:"m/Y" }}</td>
+                        <td>{{ item.quantidade }}</td>
+                        <td>R$ {{ item.faturamento|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">Nenhuma venda concluída encontrada.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</section>
+
+{% endblock content %}
