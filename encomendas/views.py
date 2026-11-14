@@ -4,7 +4,7 @@ from decimal import Decimal
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Case, When, DecimalField, Value
 from django.db.models.functions import TruncMonth
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -292,6 +292,48 @@ def relatorios(request):
         faturamento=Sum('valor_total')
     ).order_by('mes')
 
+    vendas_pivot = encomendas.annotate(
+        mes=TruncMonth('data_criacao')
+    ).values(
+        'mes'
+    ).annotate(
+        pendente=Sum(
+            Case(
+                When(status='Pendente', then='valor_total'),
+                default=Value(0),
+                output_field=DecimalField()
+            )
+        ),
+        em_producao=Sum(
+            Case(
+                When(status='Em Producao', then='valor_total'),
+                default=Value(0),
+                output_field=DecimalField()
+            )
+        ),
+        pronto=Sum(
+            Case(
+                When(status='Pronto', then='valor_total'),
+                default=Value(0),
+                output_field=DecimalField()
+            )
+        ),
+        concluida=Sum(
+            Case(
+                When(status='Concluida', then='valor_total'),
+                default=Value(0),
+                output_field=DecimalField()
+            )
+        ),
+        cancelada=Sum(
+            Case(
+                When(status='Cancelada', then='valor_total'),
+                default=Value(0),
+                output_field=DecimalField()
+            )
+        )
+    ).order_by('mes')
+
     context = {
         'total_encomendas': total_encomendas,
         'totais_status': totais_status,
@@ -299,6 +341,7 @@ def relatorios(request):
         'produtos_mais_vendidos': produtos_mais_vendidos,
         'kits_mais_vendidos': kits_mais_vendidos,
         'vendas_mensais': vendas_mensais,
+        'vendas_pivot': vendas_pivot,
         'data_inicio': data_inicio,
         'data_fim': data_fim,
     }

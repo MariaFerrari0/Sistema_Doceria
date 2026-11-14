@@ -116,6 +116,43 @@
         </div>
     </section>
 
+    <section class="relatorio-secao">
+        <h2>Pivot - Faturamento por Mês e Status</h2>
+
+        <div class="tabela-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mês</th>
+                        <th>Pendente</th>
+                        <th>Em Produção</th>
+                        <th>Pronto</th>
+                        <th>Concluída</th>
+                        <th>Cancelada</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in vendas_pivot %}
+                    <tr>
+                        <td>{{ item.mes|date:"m/Y" }}</td>
+                        <td>R$ {{ item.pendente|floatformat:2 }}</td>
+                        <td>R$ {{ item.em_producao|floatformat:2 }}</td>
+                        <td>R$ {{ item.pronto|floatformat:2 }}</td>
+                        <td>R$ {{ item.concluida|floatformat:2 }}</td>
+                        <td>R$ {{ item.cancelada|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">Nenhuma encomenda encontrada.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
 </section>
 
 {% endblock content %}
+
