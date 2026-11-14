@@ -1,5 +1,8 @@
+
 from django.db import models
+from django.contrib.auth.models import User
 from django.utils.text import slugify
+
 from categorias.models import Categoria
 from sistema_doceria.validators import validar_preco_positivo
 
@@ -9,15 +12,22 @@ class Produto(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     descricao = models.TextField()
     preco = models.DecimalField(
-        max_digits=8, 
-        decimal_places=2, 
+        max_digits=8,
+        decimal_places=2,
         validators=[validar_preco_positivo]
     )
     estoque = models.PositiveIntegerField(default=0)
     ativo = models.BooleanField(default=True)
-    imagem = models.ImageField(upload_to='produtos/%Y/%m/', blank=True, null=True)
+    imagem = models.ImageField(
+        upload_to='produtos/%Y/%m/',
+        blank=True,
+        null=True
+    )
     categoria = models.ForeignKey(
-        Categoria, on_delete=models.SET_NULL, null=True, related_name='produtos'
+        Categoria,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='produtos'
     )
 
     class Meta:
@@ -31,3 +41,45 @@ class Produto(models.Model):
         if not self.slug:
             self.slug = slugify(self.nome)
         super().save(*args, **kwargs)
+
+
+class Movimentacao(models.Model):
+
+    TIPO_CHOICES = (
+        ('Entrada', 'Entrada'),
+        ('Saida', 'Saída'),
+    )
+
+    produto = models.ForeignKey(
+        Produto,
+        on_delete=models.PROTECT,
+        related_name='movimentacoes'
+    )
+
+    tipo = models.CharField(
+        max_length=10,
+        choices=TIPO_CHOICES
+    )
+
+    quantidade = models.PositiveIntegerField()
+
+    motivo = models.CharField(max_length=255)
+
+    responsavel = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='movimentacoes_estoque'
+    )
+
+    data_movimentacao = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Movimentação'
+        verbose_name_plural = 'Movimentações'
+        ordering = ['-data_movimentacao']
+
+    def __str__(self):
+        return (
+            f'{self.tipo} - {self.produto.nome} '
+            f'({self.quantidade})'
+        )

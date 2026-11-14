@@ -1,5 +1,6 @@
+
 from django import forms
-from .models import Produto
+from .models import Produto, Movimentacao
 
 
 class ProdutoForm(forms.ModelForm):
@@ -27,3 +28,31 @@ class ProdutoForm(forms.ModelForm):
         if estoque is not None and estoque < 0:
             raise forms.ValidationError('O estoque não pode ser negativo.')
         return estoque
+
+
+class MovimentacaoForm(forms.ModelForm):
+    class Meta:
+        model = Movimentacao
+        fields = ['produto', 'tipo', 'quantidade', 'motivo']
+        widgets = {
+            'produto': forms.Select(attrs={'class': 'input-control'}),
+            'tipo': forms.Select(attrs={'class': 'input-control'}),
+            'quantidade': forms.NumberInput(attrs={
+                'class': 'input-control',
+                'min': '1'
+            }),
+            'motivo': forms.TextInput(attrs={
+                'class': 'input-control',
+                'placeholder': 'Informe o motivo da movimentação'
+            }),
+        }
+
+    def clean_quantidade(self):
+        quantidade = self.cleaned_data.get('quantidade')
+
+        if quantidade is not None and quantidade < 1:
+            raise forms.ValidationError(
+                'A quantidade deve ser maior que zero.'
+            )
+
+        return quantidade

@@ -1,0 +1,61 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Histórico de Movimentações | Doce Delícia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="form-container">
+
+    <div class="topo">
+        <a href="{% url 'produtos:listar' %}" aria-label="Voltar">←</a>
+        <h1>Histórico de Movimentações</h1>
+    </div>
+
+    <div class="tabela-container">
+        {% if movimentacoes %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Tipo</th>
+                        <th>Quantidade</th>
+                        <th>Motivo</th>
+                        <th>Responsável</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for movimentacao in movimentacoes %}
+                        <tr>
+                            <td>{{ movimentacao.produto.nome }}</td>
+
+                            <td>
+                                {% if movimentacao.tipo == 'Entrada' %}
+                                    <span class="status-entrada">Entrada</span>
+                                {% else %}
+                                    <span class="status-saida">Saída</span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ movimentacao.quantidade }}</td>
+                            <td>{{ movimentacao.motivo }}</td>
+                            <td>{{ movimentacao.responsavel.username }}</td>
+                            <td>{{ movimentacao.data_movimentacao|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+            <p>Nenhuma movimentação de estoque foi registrada.</p>
+        {% endif %}
+    </div>
+
+</section>
+{% endblock %}

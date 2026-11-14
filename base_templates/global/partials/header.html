@@ -1,3 +1,4 @@
+
 <header class="main-header">
   <div class="logo-container">
     <a href="{% url 'administradora:home' %}" class="logo-text">
@@ -12,9 +13,11 @@
       <a href="{% url 'produtos:listar' %}">Produtos</a>
       <a href="{% url 'kits:listar' %}">Kits</a>
       <a href="{% url 'encomendas:listar' %}">Encomendas</a>
+      <a href="{% url 'produtos:movimentar_estoque' %}">Movimentar Estoque</a>
+      <a href="{% url 'produtos:historico_movimentacoes' %}">Histórico de Movimentações</a>
       <a href="{% url 'administradora:perfil_ver' %}">Meu Perfil</a>
-      <a href="{% url 'administradora:logout' %}" 
-         onclick="return confirm('Tem certeza que deseja sair do sistema?');" 
+      <a href="{% url 'administradora:logout' %}"
+         onclick="return confirm('Tem certeza que deseja sair do sistema?');"
          style="color: var(--color-primary);">
          Sair ({{ user.username }})
       </a>

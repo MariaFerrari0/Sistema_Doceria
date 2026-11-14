@@ -1,0 +1,243 @@
+
+.tabela-container {
+    width: 100%;
+    margin-top: 25px;
+    overflow-x: auto;
+    background: #fffaf5;
+    border: 1px solid #ead6c8;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(80, 40, 30, 0.06);
+}
+
+.tabela-container table {
+    width: 100%;
+    min-width: 850px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.tabela-container thead {
+    background: #8f222c;
+    color: #fff;
+}
+
+.tabela-container th {
+    padding: 17px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.tabela-container td {
+    padding: 17px 20px;
+    font-size: 14px;
+    color: #49352d;
+    border-bottom: 1px solid #f0e2d8;
+    white-space: nowrap;
+}
+
+.tabela-container tbody tr {
+    transition: background 0.2s ease;
+}
+
+.tabela-container tbody tr:hover {
+    background: #f9eee5;
+}
+
+.tabela-container tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.status-entrada,
+.status-saida {
+    display: inline-block;
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-entrada {
+    color: #237346;
+    background: #e2f4e8;
+}
+
+.status-saida {
+    color: #a12632;
+    background: #fbe5e5;
+}
+
+.form-container {
+    max-width: 1250px;
+    margin: 40px auto;
+    padding: 25px;
+}
+
+.form-container .topo {
+    margin-bottom: 20px;
+}
+
+.form-container .topo h1 {
+    color: #49352d;
+    font-size: 32px;
+    margin-top: 15px;
+}
+
+.tabela-container > p {
+    padding: 30px;
+    text-align: center;
+    color: #80685d;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .form-container .topo h1 {
+        font-size: 25px;
+    }
+
+    .tabela-container th,
+    .tabela-container td {
+        padding: 13px 15px;
+    }
+}
+
+.filtros-historico {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    padding: 22px;
+    margin: 20px 0 25px;
+    background: #fffaf5;
+    border: 1px solid #ead6c8;
+    border-radius: 14px;
+}
+
+.filtro-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.filtro-grupo label {
+    color: #49352d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.filtro-grupo .input-control {
+    min-width: 0;
+    height: 43px;
+    background: #fff;
+}
+
+.filtro-acoes {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filtro-acoes .btn {
+    padding: 11px 22px;
+}
+
+.btn-limpar {
+    color: #8f222c;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+@media (max-width: 800px) {
+    .filtros-historico {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 500px) {
+    .filtros-historico {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .filtro-acoes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filtro-acoes .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.resumo-movimentacoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    margin: 25px 0;
+}
+
+.resumo-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 25px;
+    background: #fffaf5;
+    border: 1px solid #ead6c8;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(80, 40, 30, 0.05);
+}
+
+.resumo-icone {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 27px;
+    flex-shrink: 0;
+}
+
+.resumo-entrada .resumo-icone {
+    background: #e2f4e8;
+}
+
+.resumo-saida .resumo-icone {
+    background: #fbe5e5;
+}
+
+.resumo-card div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.resumo-card span {
+    color: #70594e;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.resumo-card strong {
+    color: #49352d;
+    font-size: 30px;
+    line-height: 1.3;
+}
+
+.resumo-card small {
+    color: #927d70;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .resumo-movimentacoes {
+        grid-template-columns: 1fr;
+    }
+}

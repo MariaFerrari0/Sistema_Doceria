@@ -282,48 +282,96 @@ a {
 }
 
 
-/* BENEFÍCIOS DA LOJA */
+
+/* =====================================
+   BENEFÍCIOS - DOCE DELÍCIA
+===================================== */
 
 .benefits {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 40px auto 0;
-    padding: 30px 16px;
+    padding: 35px 30px;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 25px;
+    align-items: center;
+    box-sizing: border-box;
 }
 
-.benefits > div {
+.benefits .benefit-item {
     display: flex;
-    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
     gap: 12px;
+    min-width: 0;
 }
 
-.benefits > div > span {
-    font-size: 25px;
+.benefits .benefit-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
     flex-shrink: 0;
 }
 
-.benefits p {
-    font-size: 14px;
-    line-height: 1.6;
+.benefits .benefit-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-.benefits strong {
+.benefits .benefit-text strong {
     display: block;
     color: var(--color-primary);
-    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
 }
+
+.benefits .benefit-text p {
+    margin: 0;
+    color: #70594e;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* RODAPÉ */
+
+.main-footer {
+    width: 100%;
+    padding: 25px 15px;
+    text-align: center;
+    background: var(--color-primary);
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.main-footer p {
+    margin: 8px 0;
+}
+
+.main-footer small {
+    font-size: 13px;
+    color: #f9e5df;
+}
+
+/* TABLETS */
 
 @media (max-width: 800px) {
     .benefits {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 25px;
     }
 }
+
+/* CELULARES */
 
 @media (max-width: 500px) {
     .benefits {
         grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 25px 20px;
     }
 }
+

@@ -1,0 +1,149 @@
+
+{% extends "global/base.html" %}
+{% load static %}
+
+{% block title %}Histórico de Movimentações | Doce Delícia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="form-container historico-container">
+
+    <div class="topo">
+        <a href="{% url 'produtos:listar' %}" aria-label="Voltar">←</a>
+        <h1>Histórico de Movimentações</h1>
+    </div>
+
+    <!-- FILTROS -->
+    <form method="GET" class="filtros-historico">
+
+        <div class="filtro-grupo">
+            <label for="produto">Produto</label>
+            <select name="produto" id="produto" class="input-control">
+                <option value="">Todos os produtos</option>
+
+                {% for produto in produtos %}
+                    <option value="{{ produto.id }}"
+                        {% if produto_selecionado == produto.id|stringformat:"s" %}selected{% endif %}>
+                        {{ produto.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="filtro-grupo">
+            <label for="tipo">Tipo de movimentação</label>
+            <select name="tipo" id="tipo" class="input-control">
+                <option value="">Todos os tipos</option>
+                <option value="Entrada" {% if tipo_selecionado == 'Entrada' %}selected{% endif %}>
+                    Entrada
+                </option>
+                <option value="Saida" {% if tipo_selecionado == 'Saida' %}selected{% endif %}>
+                    Saída
+                </option>
+            </select>
+        </div>
+
+        <div class="filtro-grupo">
+            <label for="data_inicio">Data inicial</label>
+            <input
+                type="date"
+                name="data_inicio"
+                id="data_inicio"
+                class="input-control"
+                value="{{ data_inicio|default:'' }}"
+            >
+        </div>
+
+        <div class="filtro-grupo">
+            <label for="data_fim">Data final</label>
+            <input
+                type="date"
+                name="data_fim"
+                id="data_fim"
+                class="input-control"
+                value="{{ data_fim|default:'' }}"
+            >
+        </div>
+
+        <div class="filtro-acoes">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+
+            <a href="{% url 'produtos:historico_movimentacoes' %}" class="btn-limpar">
+                Limpar filtros
+            </a>
+        </div>
+
+    </form>
+
+    <!-- RESUMO DO ESTOQUE -->
+    <div class="resumo-movimentacoes">
+
+        <div class="resumo-card resumo-entrada">
+            <div class="resumo-icone">📥</div>
+            <div>
+                <span>Total de entradas</span>
+                <strong>{{ total_entradas }}</strong>
+                <small>Unidades recebidas</small>
+            </div>
+        </div>
+
+        <div class="resumo-card resumo-saida">
+            <div class="resumo-icone">📤</div>
+            <div>
+                <span>Total de saídas</span>
+                <strong>{{ total_saidas }}</strong>
+                <small>Unidades retiradas</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TABELA -->
+    <div class="tabela-container">
+
+        {% if movimentacoes %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Tipo</th>
+                        <th>Quantidade</th>
+                        <th>Motivo</th>
+                        <th>Responsável</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for movimentacao in movimentacoes %}
+                        <tr>
+                            <td>{{ movimentacao.produto.nome }}</td>
+
+                            <td>
+                                {% if movimentacao.tipo == 'Entrada' %}
+                                    <span class="status-entrada">Entrada</span>
+                                {% else %}
+                                    <span class="status-saida">Saída</span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ movimentacao.quantidade }}</td>
+                            <td>{{ movimentacao.motivo }}</td>
+                            <td>{{ movimentacao.responsavel.username }}</td>
+                            <td>{{ movimentacao.data_movimentacao|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+            <p>Nenhuma movimentação encontrada para os filtros selecionados.</p>
+        {% endif %}
+
+    </div>
+
+</section>
+{% endblock %}
