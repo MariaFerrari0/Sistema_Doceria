@@ -1,0 +1,274 @@
+
+/* ========================================
+   CARRINHO - DOCE DELÍCIA
+======================================== */
+
+.carrinho {
+    width: 100%;
+    max-width: 1050px;
+    margin: 50px auto;
+    padding: 35px;
+    background: #FFFCFA;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(91, 42, 35, 0.08);
+}
+
+/* Cabeçalho */
+
+.carrinho .topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #EEDDD7;
+}
+
+.carrinho .topo h1 {
+    flex: 1;
+    margin: 0;
+    color: var(--color-text);
+    font-size: 28px;
+}
+
+.carrinho .topo > a {
+    color: var(--color-primary);
+    font-size: 28px;
+    text-decoration: none;
+}
+
+.carrinho .topo form,
+.carrinho .item form {
+    margin: 0;
+}
+
+.carrinho .lixo,
+.carrinho .del {
+    border: none;
+    background: #F8E9E6;
+    color: #9B343D;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.carrinho .lixo {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+}
+
+.carrinho .lixo:hover,
+.carrinho .del:hover {
+    background: #F0D5D1;
+}
+
+/* Produtos */
+
+.carrinho #itens {
+    display: flex;
+    flex-direction: column;
+}
+
+.carrinho .item {
+    display: grid;
+    grid-template-columns: 90px 1fr auto auto auto;
+    align-items: center;
+    gap: 22px;
+    padding: 22px 0;
+    border-bottom: 1px solid #F0E2DD;
+}
+
+.carrinho .img-slot {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 13px;
+    background: #F5EAE4;
+    color: var(--color-primary);
+    font-size: 35px;
+}
+
+.carrinho .img-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carrinho .nome {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.carrinho .nome strong {
+    color: var(--color-text);
+    font-size: 16px;
+}
+
+.carrinho .nome span {
+    color: #856B63;
+    font-size: 14px;
+}
+
+/* Quantidade */
+
+.carrinho .qty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.carrinho .qty button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #E4C9C1;
+    border-radius: 8px;
+    background: #F9EFEC;
+    color: var(--color-primary);
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.carrinho .qty button:hover:not(:disabled) {
+    background: #F0DCD6;
+}
+
+.carrinho .qty button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.carrinho .qty input {
+    width: 42px;
+    height: 32px;
+    border: 1px solid #E4C9C1;
+    border-radius: 8px;
+    background: #FFFCFA;
+    color: var(--color-text);
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Subtotal e remoção */
+
+.carrinho .sub {
+    color: var(--color-primary);
+    font-size: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.carrinho .del {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+}
+
+/* Carrinho vazio */
+
+.carrinho .vazio {
+    padding: 45px 15px;
+    color: #856B63;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Total */
+
+.carrinho .total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0;
+    padding: 20px;
+    border-radius: 12px;
+    background: #F8EDE9;
+}
+
+.carrinho .total span {
+    color: var(--color-text);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.carrinho .total strong {
+    color: var(--color-primary);
+    font-size: 25px;
+}
+
+/* Botões inferiores */
+
+.carrinho > .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+    margin-top: 12px;
+    border-radius: 30px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.carrinho > .btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsividade */
+
+@media (max-width: 750px) {
+    .carrinho {
+        margin: 25px auto;
+        padding: 22px;
+    }
+
+    .carrinho .item {
+        grid-template-columns: 70px 1fr auto;
+        gap: 12px;
+    }
+
+    .carrinho .img-slot {
+        width: 70px;
+        height: 70px;
+    }
+
+    .carrinho .nome {
+        grid-column: 2;
+    }
+
+    .carrinho .qty {
+        grid-column: 2;
+    }
+
+    .carrinho .sub {
+        grid-column: 2;
+    }
+
+    .carrinho .item form:last-child {
+        grid-column: 3;
+        grid-row: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .carrinho {
+        padding: 17px;
+    }
+
+    .carrinho .topo h1 {
+        font-size: 22px;
+    }
+
+    .carrinho .item {
+        gap: 10px;
+    }
+
+    .carrinho .total strong {
+        font-size: 21px;
+    }
+}

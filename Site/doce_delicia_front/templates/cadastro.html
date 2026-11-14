@@ -1,0 +1,83 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cadastro | Doce Delícia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="login-box card">
+
+    <div class="login-seal img-slot">
+        <span class="seal-text">Doce<br>Delícia</span>
+    </div>
+
+    <h1>CRIE SUA CONTA ♡</h1>
+    <p class="sub">Cadastre-se para continuar suas compras</p>
+
+    <form method="post" class="login-form">
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="msg error">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <label class="field">
+            <span>👤</span>
+            {{ form.first_name }}
+        </label>
+
+        <label class="field">
+            <span>👤</span>
+            {{ form.last_name }}
+        </label>
+
+        <label class="field">
+            <span>✉️</span>
+            {{ form.email }}
+        </label>
+
+        <label class="field">
+            <span>📱</span>
+            {{ form.telefone }}
+        </label>
+
+        <label class="field">
+            <span>🔒</span>
+            {{ form.password1 }}
+        </label>
+
+        <label class="field">
+            <span>🔒</span>
+            {{ form.password2 }}
+        </label>
+
+        <button type="submit" class="btn btn-primary btn-block">
+            Criar minha conta
+        </button>
+    </form>
+
+    <p class="cadastro">
+        Já possui uma conta?
+        <a href="{% url 'loja:login' %}">
+            <strong>Entrar</strong>
+        </a>
+    </p>
+
+</section>
+
+{% endblock %}

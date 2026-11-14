@@ -1,0 +1,224 @@
+
+/* ========================================
+   DETALHES DO PRODUTO - DOCE DELÍCIA
+======================================== */
+
+.produto-detalhe {
+    width: 100%;
+    max-width: 1200px;
+    margin: 55px auto;
+    padding: 0 30px;
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    gap: 65px;
+    align-items: center;
+}
+
+/* Imagem do produto */
+
+.produto-detalhe-imagem {
+    width: 100%;
+    height: 480px;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #F5EAE4;
+    box-shadow: 0 8px 25px rgba(91, 42, 35, 0.08);
+}
+
+.produto-detalhe-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.sem-imagem {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    color: var(--color-primary);
+    font-size: 65px;
+}
+
+.sem-imagem span {
+    font-size: 15px;
+    color: #8A625B;
+}
+
+/* Informações do produto */
+
+.produto-detalhe-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.produto-categoria {
+    color: var(--color-primary);
+    background: #F5E5E2;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.produto-detalhe-info h1 {
+    color: var(--color-text);
+    font-size: 38px;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.produto-descricao {
+    color: #725B54;
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0;
+}
+
+.produto-preco {
+    color: var(--color-primary);
+    font-size: 34px;
+    font-weight: 800;
+    margin: 5px 0;
+}
+
+.produto-disponibilidade {
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #EDF6EE;
+}
+
+.disponivel {
+    color: #25834A;
+    font-weight: 700;
+}
+
+.indisponivel {
+    color: #B52B35;
+    font-weight: 700;
+    background: #FCEBEC;
+}
+
+/* Formulário de quantidade */
+
+.produto-detalhe-info form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+.produto-detalhe-info form label {
+    color: var(--color-text);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.produto-detalhe-info form input[type="number"] {
+    width: 75px;
+    height: 44px;
+    padding: 8px;
+    border: 1px solid #D9BDB5;
+    border-radius: 9px;
+    background: #FFFDFC;
+    color: var(--color-text);
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+}
+
+.produto-detalhe-info form input[type="number"]:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(145, 35, 45, 0.12);
+}
+
+/* Botões */
+
+.produto-detalhe-info .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 8px;
+    padding: 13px 27px;
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.produto-detalhe-info .btn:hover {
+    transform: translateY(-2px);
+}
+
+.produto-detalhe-info form .btn {
+    margin-top: 0;
+}
+
+.produto-detalhe-info button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsividade */
+
+@media (max-width: 800px) {
+    .produto-detalhe {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        margin: 35px auto;
+        padding: 0 22px;
+    }
+
+    .produto-detalhe-imagem {
+        height: 380px;
+    }
+
+    .produto-detalhe-info h1 {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .produto-detalhe {
+        padding: 0 16px;
+        margin: 25px auto;
+    }
+
+    .produto-detalhe-imagem {
+        height: 280px;
+    }
+
+    .produto-detalhe-info h1 {
+        font-size: 28px;
+    }
+
+    .produto-preco {
+        font-size: 29px;
+    }
+
+    .produto-detalhe-info form {
+        width: 100%;
+    }
+
+    .produto-detalhe-info form .btn {
+        width: 100%;
+    }
+
+    .produto-detalhe-info > .btn {
+        width: 100%;
+    }
+}

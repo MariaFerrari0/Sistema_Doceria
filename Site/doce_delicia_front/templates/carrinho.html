@@ -1,41 +1,120 @@
+
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}Meu Carrinho | Doce Delícia{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'css/carrinho.css' %}">{% endblock %}
-{% block content %}
-<section class="carrinho card">
-  <div class="topo">
-    <a href="{% url 'produtos:listar' %}" aria-label="Voltar">←</a>
-    <h1>Meu Carrinho</h1>
-    <button class="lixo" id="limpar" aria-label="Esvaziar carrinho">🗑</button>
-  </div>
 
-  <div id="itens">
-    {% for item in itens %}
-    <div class="item" data-price="{{ item.preco|stringformat:'.2f' }}">
-      <div class="img-slot">{% if item.imagem %}<img src="{{ item.imagem.url }}" alt="{{ item.nome }}">{% endif %}</div>
-      <div class="nome"><strong>{{ item.nome }}</strong><span>R$ {{ item.preco|floatformat:2 }}</span></div>
-      <div class="qty"><button type="button" data-qty="-1">−</button><input type="number" value="{{ item.quantidade }}" min="1" readonly><button type="button" data-qty="1">+</button></div>
-      <span class="sub">R$ 0,00</span>
-      <button class="del" aria-label="Remover">🗑</button>
-    </div>
-    {% empty %}<p class="vazio">Seu carrinho está vazio. Que tal escolher uns docinhos?</p>{% endfor %}
-  </div>
-
-  <div class="total"><span>Total</span><strong id="total">R$ 0,00</strong></div>
-  <a href="#" class="btn btn-primary btn-block">💬 Finalizar pedido via WhatsApp</a> {# TODO: url do pedido #}
-  <a href="{% url 'produtos:listar' %}" class="btn btn-outline btn-block">‹ Continuar comprando</a>
-</section>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/carrinho.css' %}">
 {% endblock %}
-{% block extra_js %}
-<script>
-const brl=v=>'R$ '+v.toFixed(2).replace('.',',');
-function recalc(){let t=0;document.querySelectorAll('.item').forEach(i=>{const s=+i.dataset.price*+i.querySelector('input').value;i.querySelector('.sub').textContent=brl(s);t+=s});
- const el=document.getElementById('total');el.textContent=brl(t);el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse')}
-document.querySelectorAll('.item [data-qty]').forEach(b=>b.onclick=()=>{const i=b.closest('.item').querySelector('input');i.value=Math.max(1,+i.value+ +b.dataset.qty);recalc()});
-function remover(i){i.classList.add('out');setTimeout(()=>{i.remove();recalc()},350)}
-document.querySelectorAll('.del').forEach(b=>b.onclick=()=>remover(b.closest('.item')));
-document.getElementById('limpar').onclick=()=>document.querySelectorAll('.item').forEach(remover);
-recalc();
-</script>
+
+{% block content %}
+
+<section class="carrinho card">
+
+    <div class="topo">
+        <a href="{% url 'loja:catalogo' %}" aria-label="Voltar">←</a>
+        <h1>Meu Carrinho</h1>
+
+        {% if itens %}
+        <form method="post" action="{% url 'loja:limpar_carrinho' %}">
+            {% csrf_token %}
+            <button type="submit" class="lixo" aria-label="Esvaziar carrinho">🗑</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div id="itens">
+
+        {% for item in itens %}
+
+        <div class="item">
+
+            <div class="img-slot">
+                {% if item.imagem %}
+                    <img src="{{ item.imagem.url }}" alt="{{ item.nome }}">
+                {% else %}
+                    <span>🍰</span>
+                {% endif %}
+            </div>
+
+            <div class="nome">
+                <strong>{{ item.nome }}</strong>
+                <span>R$ {{ item.preco|floatformat:2 }}</span>
+            </div>
+
+            <form
+                class="qty"
+                method="post"
+                action="{% url 'loja:atualizar_carrinho' item.id %}"
+            >
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    name="quantidade"
+                    value="{{ item.quantidade|add:'-1' }}"
+                    {% if item.quantidade <= 1 %}disabled{% endif %}
+                >−</button>
+
+                <input
+                    type="number"
+                    value="{{ item.quantidade }}"
+                    min="1"
+                    max="{{ item.estoque }}"
+                    readonly
+                >
+
+                <button
+                    type="submit"
+                    name="quantidade"
+                    value="{{ item.quantidade|add:'1' }}"
+                    {% if item.quantidade >= item.estoque %}disabled{% endif %}
+                >+</button>
+            </form>
+
+            <span class="sub">
+                R$ {{ item.subtotal|floatformat:2 }}
+            </span>
+
+            <form
+                method="post"
+                action="{% url 'loja:remover_carrinho' item.id %}"
+            >
+                {% csrf_token %}
+                <button type="submit" class="del" aria-label="Remover produto">
+                    🗑
+                </button>
+            </form>
+
+        </div>
+
+        {% empty %}
+
+        <p class="vazio">
+            Seu carrinho está vazio. Que tal escolher uns docinhos?
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+    {% if itens %}
+
+    <div class="total">
+        <span>Total</span>
+        <strong>R$ {{ total|floatformat:2 }}</strong>
+    </div>
+
+    {% endif %}
+
+   <a href="{% url 'loja:finalizar_pedido' %}" class="btn btn-primary btn-block">
+    💬 Finalizar pedido via WhatsApp
+</a>
+    <a href="{% url 'loja:catalogo' %}" class="btn btn-outline btn-block">
+        ‹ Continuar comprando
+    </a>
+
+</section>
+
 {% endblock %}

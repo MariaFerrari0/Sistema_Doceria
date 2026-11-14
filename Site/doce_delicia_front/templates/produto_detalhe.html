@@ -1,0 +1,88 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ produto.nome }} | Doce Delícia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/produto_detalhe.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="produto-detalhe">
+
+    <div class="produto-detalhe-imagem">
+        {% if produto.imagem %}
+            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
+        {% else %}
+            <div class="sem-imagem">
+                🍰
+                <span>Imagem indisponível</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="produto-detalhe-info">
+
+        <span class="produto-categoria">
+            {% if produto.categoria %}
+                {{ produto.categoria.nome }}
+            {% else %}
+                Sem categoria
+            {% endif %}
+        </span>
+
+        <h1>{{ produto.nome }}</h1>
+
+        <p class="produto-descricao">
+            {{ produto.descricao|linebreaksbr }}
+        </p>
+
+        <p class="produto-preco">
+            R$ {{ produto.preco|floatformat:2 }}
+        </p>
+
+        <div class="produto-disponibilidade">
+            {% if produto.estoque > 0 %}
+                <span class="disponivel">Disponível em estoque</span>
+            {% else %}
+                <span class="indisponivel">Produto indisponível no momento</span>
+            {% endif %}
+        </div>
+
+        {% if produto.estoque > 0 %}
+            <form method="post" action="{% url 'loja:adicionar_carrinho' produto.id %}">
+                {% csrf_token %}
+
+                <label for="quantidade">Quantidade:</label>
+
+                <input
+                    type="number"
+                    name="quantidade"
+                    id="quantidade"
+                    value="1"
+                    min="1"
+                    max="{{ produto.estoque }}"
+                    required
+                >
+
+                <button type="submit" class="btn btn-primary">
+                    Adicionar ao carrinho
+                </button>
+            </form>
+        {% else %}
+            <button class="btn btn-primary" disabled>
+                Produto indisponível
+            </button>
+        {% endif %}
+
+        <a href="{% url 'loja:catalogo' %}" class="btn btn-primary">
+            Voltar ao catálogo
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}
