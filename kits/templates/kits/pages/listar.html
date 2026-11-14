@@ -1,12 +1,45 @@
+
 {% extends 'global/base.html' %}
+{% load static %}
 
 {% block title %}Gerenciamento de Kits{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+{% endblock extra_css %}
 
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center;">
   <h2>Gerenciar Kits de Doces</h2>
   <a href="{% url 'kits:criar' %}" class="btn">+ Novo Kit</a>
 </div>
+
+<form method="GET" class="filtros-relatorio">
+  <div>
+    <label for="busca">Pesquisar kit:</label>
+    <input
+      type="text"
+      name="busca"
+      id="busca"
+      placeholder="Digite o nome do kit"
+      value="{{ busca }}"
+    >
+  </div>
+
+  <div>
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+      <option value="">Todos</option>
+      <option value="ativo" {% if status_selecionado == 'ativo' %}selected{% endif %}>Ativos</option>
+      <option value="inativo" {% if status_selecionado == 'inativo' %}selected{% endif %}>Inativos</option>
+    </select>
+  </div>
+
+  <div class="acoes-filtro">
+    <button type="submit" class="btn">Filtrar</button>
+    <a href="{% url 'kits:listar' %}" class="btn">Limpar</a>
+  </div>
+</form>
 
 <div class="table-container">
   <table class="data-table">

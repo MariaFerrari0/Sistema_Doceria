@@ -241,3 +241,163 @@
         grid-template-columns: 1fr;
     }
 }
+
+
+.filtros-relatorio {
+    display: grid;
+    grid-template-columns: minmax(220px, 2fr) minmax(180px, 1fr) minmax(150px, 1fr) auto;
+    align-items: end;
+    gap: 16px;
+    padding: 22px;
+    margin: 22px 0 25px;
+    background: #fffaf5;
+    border: 1px solid #ead6c8;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(80, 40, 30, 0.05);
+}
+
+.filtros-relatorio > div:not(.filtro-botoes) {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.filtros-relatorio label {
+    color: #49352d;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.filtros-relatorio input,
+.filtros-relatorio select {
+    width: 100%;
+    height: 44px;
+    padding: 0 13px;
+    color: #49352d;
+    background: #fff;
+    border: 1px solid #dfc9ba;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filtros-relatorio input:focus,
+.filtros-relatorio select:focus {
+    border-color: #8f222c;
+    box-shadow: 0 0 0 3px rgba(143, 34, 44, 0.10);
+}
+
+.filtros-relatorio input::placeholder {
+    color: #a18c80;
+}
+
+.filtro-botoes {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 44px;
+    white-space: nowrap;
+}
+
+.filtro-botoes .btn {
+    height: 44px;
+    padding: 0 25px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 25px;
+    background: #8f222c;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.filtro-botoes .btn:hover {
+    background: #741923;
+    transform: translateY(-1px);
+}
+
+.filtro-botoes .btn-limpar {
+    color: #8f222c;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.filtro-botoes .btn-limpar:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+    .filtros-relatorio {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .filtro-botoes {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 550px) {
+    .filtros-relatorio {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+
+    .filtro-botoes {
+        grid-column: auto;
+        flex-wrap: wrap;
+    }
+
+    .filtro-botoes .btn {
+        flex: 1;
+    }
+}
+
+
+/* Layout dos filtros de Kits */
+.filtros-relatorio {
+    display: grid;
+    grid-template-columns: minmax(280px, 2fr) minmax(180px, 1fr) auto;
+    align-items: end;
+    gap: 20px;
+}
+
+.filtros-relatorio .acoes-filtro {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 0;
+    width: auto;
+}
+
+.filtros-relatorio .acoes-filtro .btn,
+.filtros-relatorio .acoes-filtro button {
+    display: inline-flex !important;
+    width: 110px !important;
+    min-width: 110px;
+    height: 44px;
+    flex: none !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0 12px;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .filtros-relatorio {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros-relatorio .acoes-filtro {
+        justify-content: flex-start;
+    }
+}

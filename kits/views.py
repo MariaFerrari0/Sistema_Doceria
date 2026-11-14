@@ -5,10 +5,30 @@ from .forms import KitForm
 from .models import Kit
 
 
+
 @login_required(login_url='administradora:login')
 def listar(request):
     kits = Kit.objects.all().order_by('-id')
-    return render(request, 'kits/pages/listar.html', {'kits': kits})
+
+    busca = request.GET.get('busca', '')
+    status = request.GET.get('status', '')
+
+    if busca:
+        kits = kits.filter(nome__icontains=busca)
+
+    if status == 'ativo':
+        kits = kits.filter(ativo=True)
+    elif status == 'inativo':
+        kits = kits.filter(ativo=False)
+
+    context = {
+        'kits': kits,
+        'busca': busca,
+        'status_selecionado': status,
+    }
+
+    return render(request, 'kits/pages/listar.html', context)
+
 
 
 @login_required(login_url='administradora:login')

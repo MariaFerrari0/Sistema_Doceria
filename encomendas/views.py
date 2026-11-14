@@ -43,11 +43,36 @@ def calcular_total(produtos_formset, kits_formset):
 def listar(request):
     encomendas = Encomenda.objects.all().order_by('-data_criacao')
 
+    status = request.GET.get('status', '')
+    data_inicio = request.GET.get('data_inicio', '')
+    data_fim = request.GET.get('data_fim', '')
+
+    if status:
+        encomendas = encomendas.filter(status=status)
+
+    if data_inicio:
+        encomendas = encomendas.filter(
+            data_criacao__date__gte=data_inicio
+        )
+
+    if data_fim:
+        encomendas = encomendas.filter(
+            data_criacao__date__lte=data_fim
+        )
+
+    context = {
+        'encomendas': encomendas,
+        'status_selecionado': status,
+        'data_inicio': data_inicio,
+        'data_fim': data_fim,
+    }
+
     return render(
         request,
         'encomendas/pages/listar.html',
-        {'encomendas': encomendas}
+        context
     )
+
 
 
 @login_required(login_url='administradora:login')

@@ -1,12 +1,47 @@
+
 {% extends 'global/base.html' %}
+{% load static %}
 
 {% block title %}Gerenciamento de Encomendas{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+{% endblock extra_css %}
 
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center;">
   <h2>Gerenciar Encomendas</h2>
   <a href="{% url 'encomendas:criar' %}" class="btn">+ Nova Encomenda</a>
 </div>
+
+<form method="GET" class="filtros-relatorio">
+  <div>
+    <label for="status">Status:</label>
+    <select name="status" id="status">
+      <option value="">Todos os status</option>
+      <option value="Pendente" {% if status_selecionado == 'Pendente' %}selected{% endif %}>Pendente</option>
+      <option value="Em Producao" {% if status_selecionado == 'Em Producao' %}selected{% endif %}>Em Produção</option>
+      <option value="Pronto" {% if status_selecionado == 'Pronto' %}selected{% endif %}>Pronto</option>
+      <option value="Concluida" {% if status_selecionado == 'Concluida' %}selected{% endif %}>Concluída</option>
+      <option value="Cancelada" {% if status_selecionado == 'Cancelada' %}selected{% endif %}>Cancelada</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="data_inicio">Data inicial:</label>
+    <input type="date" name="data_inicio" id="data_inicio" value="{{ data_inicio }}">
+  </div>
+
+  <div>
+    <label for="data_fim">Data final:</label>
+    <input type="date" name="data_fim" id="data_fim" value="{{ data_fim }}">
+  </div>
+
+  <div class="acoes-filtro">
+    <button type="submit" class="btn">Filtrar</button>
+    <a href="{% url 'encomendas:listar' %}" class="btn">Limpar</a>
+  </div>
+</form>
 
 <div class="table-container">
   <table class="data-table">

@@ -1,4 +1,10 @@
+
 {% extends 'global/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/produtos.css' %}">
+{% endblock extra_css %}
 
 {% block title %}Gerenciamento de Produtos{% endblock title %}
 
@@ -7,6 +13,46 @@
   <h2>Gerenciar Produtos</h2>
   <a href="{% url 'produtos:criar' %}" class="btn">+ Novo Produto</a>
 </div>
+
+<form method="get" class="filtros-relatorio">
+  <div>
+    <label for="busca">Nome do produto</label>
+    <input
+      type="text"
+      id="busca"
+      name="busca"
+      placeholder="Pesquisar produto..."
+      value="{{ busca }}"
+    >
+  </div>
+
+  <div>
+    <label for="categoria">Categoria</label>
+    <select id="categoria" name="categoria">
+      <option value="">Todas as categorias</option>
+      {% for categoria in categorias %}
+        <option value="{{ categoria.id }}"
+          {% if categoria_selecionada == categoria.id|stringformat:"s" %}selected{% endif %}>
+          {{ categoria.nome }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div>
+    <label for="status">Situação</label>
+    <select id="status" name="status">
+      <option value="">Todas</option>
+      <option value="ativo" {% if status_selecionado == 'ativo' %}selected{% endif %}>Ativos</option>
+      <option value="inativo" {% if status_selecionado == 'inativo' %}selected{% endif %}>Inativos</option>
+    </select>
+  </div>
+
+  <div class="filtro-botoes">
+    <button type="submit" class="btn">Filtrar</button>
+    <a href="{% url 'produtos:listar' %}" class="btn-limpar">Limpar</a>
+  </div>
+</form>
 
 <div class="table-container">
   <table class="data-table">
@@ -21,18 +67,23 @@
         <th>Ações</th>
       </tr>
     </thead>
+
     <tbody>
       {% for p in produtos %}
       <tr>
         <td>
           {% if p.imagem %}
             <img src="{{ p.imagem.url }}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
-          {% else %}🍰{% endif %}
+          {% else %}
+            🍰
+          {% endif %}
         </td>
+
         <td><strong>{{ p.nome }}</strong></td>
         <td>{{ p.categoria.nome|default:"Sem categoria" }}</td>
         <td>R$ {{ p.preco }}</td>
         <td>{{ p.estoque }} un</td>
+
         <td>
           {% if p.ativo %}
             <span class="badge badge-success">Ativo</span>
@@ -40,17 +91,21 @@
             <span class="badge badge-danger">Inativo</span>
           {% endif %}
         </td>
+
         <td>
           <a href="{% url 'produtos:detalhe' p.slug %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem;">Ver</a>
+
           <a href="{% url 'produtos:editar' p.id %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem; background-color:#4A3525;">Editar</a>
+
           <a href="{% url 'produtos:status' p.id %}" class="btn" style="padding:0.3rem 0.6rem; font-size:0.8rem; background-color:#A64B2A;">
             {% if p.ativo %}Desativar{% else %}Ativar{% endif %}
           </a>
         </td>
       </tr>
+
       {% empty %}
       <tr>
-        <td colspan="7">Nenhum produto cadastrado.</td>
+        <td colspan="7">Nenhum produto encontrado.</td>
       </tr>
       {% endfor %}
     </tbody>

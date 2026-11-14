@@ -5,10 +5,30 @@ from .forms import CategoriaForm
 from .models import Categoria
 
 
+
 @login_required(login_url='administradora:login')
 def listar(request):
     categorias = Categoria.objects.all().order_by('-id')
-    return render(request, 'categorias/pages/listar.html', {'categorias': categorias})
+
+    busca = request.GET.get('busca', '')
+    status = request.GET.get('status', '')
+
+    if busca:
+        categorias = categorias.filter(nome__icontains=busca)
+
+    if status == 'ativo':
+        categorias = categorias.filter(ativo=True)
+    elif status == 'inativo':
+        categorias = categorias.filter(ativo=False)
+
+    context = {
+        'categorias': categorias,
+        'busca': busca,
+        'status_selecionado': status,
+    }
+
+    return render(request, 'categorias/pages/listar.html', context)
+
 
 
 @login_required(login_url='administradora:login')
