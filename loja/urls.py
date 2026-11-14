@@ -49,4 +49,7 @@ urlpatterns = [
     path('cadastro/', views.cadastro_cliente, name='cadastro'),
     path('login/', views.login_cliente, name='login'),
     path('logout/', views.logout_cliente, name='logout'),
+
+    path('meus-pedidos/', views.meus_pedidos, name='meus_pedidos'),
+    path('meus-pedidos/<int:encomenda_id>/cancelar/',views.cancelar_meu_pedido,name='cancelar_meu_pedido'),
 ]

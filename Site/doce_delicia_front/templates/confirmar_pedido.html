@@ -1,0 +1,98 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Confirmar Pedido | Doce Delícia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/carrinho.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="carrinho card">
+
+    <div class="topo">
+        <a href="{% url 'loja:carrinho' %}" aria-label="Voltar">←</a>
+        <h1>Confirmar Pedido</h1>
+    </div>
+
+    <h2>Resumo da sua encomenda</h2>
+
+    <div id="itens">
+
+        {% for item in itens %}
+
+        <div class="item">
+
+            <div class="img-slot">
+                {% if item.produto.imagem %}
+                    <img
+                        src="{{ item.produto.imagem.url }}"
+                        alt="{{ item.produto.nome }}"
+                    >
+                {% else %}
+                    <span>🍰</span>
+                {% endif %}
+            </div>
+
+            <div class="nome">
+                <strong>{{ item.produto.nome }}</strong>
+                <span>
+                    R$ {{ item.produto.preco|floatformat:2 }}
+                </span>
+            </div>
+
+            <span>Quantidade: {{ item.quantidade }}</span>
+
+            <span class="sub">
+                R$ {{ item.subtotal|floatformat:2 }}
+            </span>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="total">
+        <span>Total do pedido</span>
+        <strong>R$ {{ total|floatformat:2 }}</strong>
+    </div>
+
+    <form method="post" class="form-confirmacao">
+
+        {% csrf_token %}
+
+        <div class="campo-data">
+            <label for="data_entrega">
+                📅 Escolha a data de entrega
+            </label>
+
+            <input
+                type="date"
+                id="data_entrega"
+                name="data_entrega"
+                min="{{ data_minima }}"
+                required
+            >
+        </div>
+
+        <p class="aviso-pedido">
+            Sua encomenda será registrada como pendente.
+            A confirmação será realizada pelo WhatsApp.
+        </p>
+
+        <button type="submit" class="btn btn-primary btn-block">
+            💬 Confirmar pedido via WhatsApp
+        </button>
+
+    </form>
+
+    <a href="{% url 'loja:carrinho' %}" class="btn btn-outline btn-block">
+        ‹ Voltar ao carrinho
+    </a>
+
+</section>
+
+{% endblock %}

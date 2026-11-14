@@ -1,0 +1,121 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Meus Pedidos | Doce Delícia{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/carrinho.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="carrinho card">
+
+    <div class="topo">
+        <a href="{% url 'loja:home' %}" aria-label="Voltar">←</a>
+        <h1>Meus Pedidos</h1>
+    </div>
+
+    {% if encomendas %}
+
+        {% for encomenda in encomendas %}
+
+            <div class="pedido-cliente">
+
+                <h2>Pedido #{{ encomenda.id }}</h2>
+
+                <p>
+                    <strong>Realizado em:</strong>
+                    {{ encomenda.data_criacao|date:"d/m/Y" }}
+                </p>
+
+                <p>
+                    <strong>Entrega:</strong>
+                    {{ encomenda.data_entrega|date:"d/m/Y" }}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    {{ encomenda.status }}
+                </p>
+
+                {% if encomenda.status == 'Pendente' %}
+                    <p>⏳ Sua encomenda está aguardando confirmação.</p>
+
+                {% elif encomenda.status == 'Em Producao' %}
+                    <p>👩‍🍳 Sua encomenda está sendo preparada pela nossa equipe!</p>
+
+                {% elif encomenda.status == 'Pronto' %}
+                    <p>🎂 Sua encomenda está pronta para entrega ou retirada!</p>
+
+                {% elif encomenda.status == 'Concluida' %}
+                    <p>💖 Sua encomenda foi concluída. Obrigado pela preferência!</p>
+
+                {% elif encomenda.status == 'Cancelada' %}
+                    <p>❌ Esta encomenda foi cancelada.</p>
+                {% endif %}
+
+                <div class="itens-pedido">
+
+                    {% for item in encomenda.itemencomendaproduto_set.all %}
+
+                        <div class="item">
+
+                            <div class="nome">
+                                <strong>{{ item.produto.nome }}</strong>
+                                <span>Quantidade: {{ item.quantidade }}</span>
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <div class="total">
+                    <span>Total do pedido</span>
+                    <strong>
+                        R$ {{ encomenda.valor_total|floatformat:2 }}
+                    </strong>
+                </div>
+
+                {% if encomenda.status == 'Pendente' %}
+                    <form
+                        method="post"
+                        action="{% url 'loja:cancelar_meu_pedido' encomenda.id %}"
+                        onsubmit="return confirm('Tem certeza de que deseja cancelar esta encomenda?');"
+                    >
+                        {% csrf_token %}
+
+                        <button type="submit" class="btn btn-outline btn-block">
+                            Cancelar pedido
+                        </button>
+                    </form>
+                {% endif %}
+
+            </div>
+
+            {% if not forloop.last %}
+                <hr>
+            {% endif %}
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="pedido-vazio">
+            <h2>Você ainda não possui pedidos.</h2>
+            <p>Quando realizar uma encomenda, ela aparecerá aqui.</p>
+
+            <a href="{% url 'loja:catalogo' %}" class="btn btn-primary">
+                Ver catálogo
+            </a>
+        </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
+

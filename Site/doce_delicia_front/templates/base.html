@@ -29,6 +29,7 @@
     {% if user.is_authenticated %}
       {% if user.perfil_cliente %}
         <a href="#">Minha Conta</a>
+        <a href="{% url 'loja:meus_pedidos' %}">Meus Pedidos</a>
         <a href="{% url 'loja:logout' %}">Sair</a>
       {% else %}
         <a href="#">Minha Conta</a>
@@ -64,3 +65,4 @@
 {% block extra_js %}{% endblock %}
 </body>
 </html>
+
